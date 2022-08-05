@@ -81,6 +81,14 @@ obj.increment();
 
 by default, only the latest state is taken into account at the moment changes are applied.
 
+---
+
+> ⚠ New changes will be applied only after changes stop happening in **the observed cell tree**.
+
+Thus, if you don't need this kind of debouncing, then call function `actualizeScheduledCells();` in appropriate places.
+
+---
+
 If you need to actualize the entire cell tree after each state change, then it is better to make a change to the method itself:
 
 ```typescript
@@ -108,15 +116,6 @@ output:
 6
 8
 ```
-
----
-
-> ⚠ New changes will be applied only after changes stop happening in **the observed cell tree**.
-
-Thus, if you don't need this kind of debouncing, then call function `actualizeScheduledCells();` in appropriate places.
-
----
-
 
 Let's look at another example:
 
