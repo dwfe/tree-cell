@@ -69,7 +69,7 @@ if comment out `actualizeScheduledCells();` then the output will be like this:
 8
 ```
 
-this is because the state changes:
+this is because when multiple state changes happen:
 
 ```typescript
 obj.increment();
@@ -79,7 +79,7 @@ obj.increment();
 obj.increment();
 ```
 
-by default, they are batched and applied once.
+by default, only the latest state is taken into account at the moment changes are applied.
 
 If you need to actualize the entire cell tree after each state change, then it is better to make a change to the method itself:
 
@@ -108,6 +108,15 @@ output:
 6
 8
 ```
+
+---
+
+> ⚠ New changes will be applied only after changes stop happening in **the observed cell tree**.
+
+Thus, if you don't need this kind of debouncing, then call function `actualizeScheduledCells();` in appropriate places.
+
+---
+
 
 Let's look at another example:
 
@@ -150,15 +159,7 @@ Tom Cat
 Jerry Mouse
 ```
 
-As you can see, despite the fact that the state of two cells changed sequentially, the result was computed once, and all this is due to batching of changes.
-
----
-
-> ⚠ Batching is essentially a debouncing - new changes will be applied only after changes stop happening in **the observed cell tree**.
-
-Thus, if you don't need batching, then call function `actualizeScheduledCells();` in appropriate places.
-
----
+As you can see, despite the fact that the state of two cells changed sequentially, the result was computed only once.
 
 # Annotating properties
 
@@ -256,7 +257,7 @@ Here `name` and `kind` are data cells. And `fullCell` is a function-based cell o
 ## Advantages of tree-cell
 
 1. Acceptance of changes in **the observed cell tree** always happens in a [nextTick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#process-nexttick)(in the Node.js environment) or in a [microtask](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)(in the browser environment).
-2. As a consequence of (1), **tree-cell** automatically batches changes. Batching speeds up the program, because interim changes are not applied.
+2. As a consequence of (1), by default **tree-cell** automatically debounce changes. Debouncing speeds up the program, because interim changes are not applied.
 3. In most cases, it is not necessary to control subscriptions/unsubscribing. Everything happens automatically based on just your code.
 4. Also, all sorts of merging/switching streams become unnecessary, for example, such: `merge`, `switchMap`, `combineLatest`, etc.
 5. Built-in `distinctUntilChanged`. Each new value is compared for equality with the previous one, using `Object.is`. You can also pass your comparison implementation - `option.isEqual`, as well as map the object fields before comparison - `option.equalsMapping`.
