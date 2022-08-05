@@ -1,0 +1,9 @@
+{
+  "extends": "@do-while-for-each/tsconfig/tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>1BDFD41C-0880-405F-AB91-6F490C60D08F</key>
+	<dict>
+		<key>Active Layer</key>
+		<string>Default</string>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1129, 684}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>36BAEFFA-CC1A-42DD-B86A-7A1AF1309310</key>
+	<dict>
+		<key>Active Layer</key>
+		<string>Default</string>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1129, 684}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>663D725E-4578-4395-B6BE-F7919A46EF99</key>
+	<dict>
+		<key>Active Layer</key>
+		<string>Default</string>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1129, 684}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>864E4FF1-BC4E-42FF-9B98-3E4206F4098D</key>
+	<dict>
+		<key>Active Layer</key>
+		<string>Default</string>
+		<key>Visible Rect</key>
+		<string>{{0, 0}, {1129, 684}}</string>
+		<key>Zoom Factor</key>
+		<real>1</real>
+	</dict>
+	<key>Bottombar Visible</key>
+	<false/>
+	<key>EB59B881-FB74-492F-9DFC-344C2686E8F0</key>
+	<dict>
+		<key>Active Layer</key>
+		<string>Default</string>
+		<key>Visible Rect</key>
+		<string>{{0, 172.22222222228763}, {2530, 1899.9999999999209}}</string>
+		<key>Zoom Factor</key>
+		<real>0.35999999999999943</real>
+	</dict>
+	<key>Expanded Ideaspaces For Section 487A7EC0-8AE9-4E85-9BB6-40C15DA6AFE4</key>
+	<array>
+		<string>487A7EC0-8AE9-4E85-9BB6-40C15DA6AFE4</string>
+		<string>C05F4253-28ED-4B75-B31F-BF657E34D89D</string>
+	</array>
+	<key>Expanded Sections</key>
+	<array>
+		<string>00000000-0000-0000-0000-000000000000</string>
+	</array>
+	<key>Last Viewed Ideaspaces For Section 487A7EC0-8AE9-4E85-9BB6-40C15DA6AFE4</key>
+	<array>
+		<string>36BAEFFA-CC1A-42DD-B86A-7A1AF1309310</string>
+	</array>
+	<key>Last Viewed Section</key>
+	<array>
+		<string>487A7EC0-8AE9-4E85-9BB6-40C15DA6AFE4</string>
+	</array>
+	<key>Normal Window Layout</key>
+	<string>{{0, 0}, {1366, 768}}</string>
+	<key>Organizer Visible</key>
+	<true/>
+	<key>Organizer Width</key>
+	<integer>236</integer>
+	<key>Primary Asset UUID Last Viewed</key>
+	<string>36BAEFFA-CC1A-42DD-B86A-7A1AF1309310</string>
+	<key>Scroll Position For Section 487A7EC0-8AE9-4E85-9BB6-40C15DA6AFE4</key>
+	<string>{0, 0}</string>
+	<key>Secondary View Vertical</key>
+	<true/>
+	<key>Secondary View Visible</key>
+	<false/>
+	<key>Sections Visible</key>
+	<false/>
+	<key>Toolbar Visible</key>
+	<true/>
+</dict>
+</plist>
