@@ -129,6 +129,55 @@ describe('03_ObsValueCell_ObsArray', () => {
     expect(rootOnChange).toBeCalledTimes(1);
     checkValue(rootCell, [4, 2, 3, 4, 5]);
 
+    /**
+     * set-by-index
+     */
+    result = arr[1] = 7;
+    actualizeScheduledCells();
+    expect(result).eq(7);
+    expect(rootCell.value.length).eq(5);
+    expect(callCount).eq(11);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [4, 7, 3, 4, 5]);
+
+    /**
+     * set-length
+     */
+    result = arr.length = 0;
+    actualizeScheduledCells();
+    expect(result).eq(0);
+    expect(rootCell.value.length).eq(0);
+    expect(callCount).eq(12);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    result = arr.length = 2;
+    actualizeScheduledCells();
+    expect(result).eq(2);
+    expect(rootCell.value.length).eq(2);
+    expect(callCount).eq(13);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [undefined, undefined]);
+
+    /**
+     * fill
+     */
+    arr.length = 0;
+    actualizeScheduledCells();
+    expect(callCount).eq(14);
+    checkValue(rootCell, []);
+    arr.push(1, 2, 3);
+    actualizeScheduledCells();
+    expect(callCount).eq(15);
+    checkValue(rootCell, [1, 2, 3]);
+
+    result = arr.fill(4, 1, 2);
+    expect(result).eq(arr);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(3);
+    expect(callCount).eq(16);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [1, 4, 3]);
 
   });
 
