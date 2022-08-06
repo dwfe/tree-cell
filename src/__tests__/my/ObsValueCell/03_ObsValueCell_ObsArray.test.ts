@@ -29,7 +29,7 @@ describe('03_ObsValueCell_ObsArray', () => {
     /**
      * push
      */
-    let result = arr.push('word');
+    let result: any = arr.push('word');
     expect(result).eq(1);
     actualizeScheduledCells();
     expect(callCount).eq(2);
@@ -93,15 +93,52 @@ describe('03_ObsValueCell_ObsArray', () => {
     expect(rootOnChange).toBeCalledTimes(1);
     checkValue(rootCell, []);
 
+    /**
+     * set-prop / delete-prop
+     */
+    expect(arr).not.toHaveProperty('hello');
+    arr['hello'] = 'world';
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(0);
+    expect(arr).toHaveProperty('hello');
+    expect(callCount).eq(7);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    delete arr['hello'];
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(0);
+    expect(arr).not.toHaveProperty('hello');
+    expect(callCount).eq(8);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    /**
+     * copyWithin
+     */
+    arr.push(1, 2, 3, 4, 5);
+    actualizeScheduledCells();
+    expect(callCount).eq(9);
+    expect(rootOnChange).toBeCalledTimes(1);
+
+    result = arr.copyWithin(0, 3, 4);
+    actualizeScheduledCells();
+    checkValue(result, [4, 2, 3, 4, 5]);
+    expect(rootCell.value.length).eq(5);
+    expect(callCount).eq(10);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [4, 2, 3, 4, 5]);
+
 
   });
 
 });
 
 function checkValue(cell: ICell, arr: any[]) {
-  expect(cell.value.length).eq(arr.length);
+  const value = (Array.isArray(cell) ? cell : cell.value) as any[];
+  expect(value.length).eq(arr.length);
   for (let i = 0; i < arr.length; i++) {
-    expect(cell.value[i]).eq(arr[i]);
+    expect(value[i]).eq(arr[i]);
   }
 }
 

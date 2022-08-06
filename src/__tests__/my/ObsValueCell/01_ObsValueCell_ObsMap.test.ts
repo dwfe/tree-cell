@@ -21,6 +21,9 @@ describe('01_ObsValueCell_ObsMap', () => {
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
 
+    /**
+     * set
+     */
     let result: any = value.set('hello', 17);
     expect(result).eq(value);
     actualizeScheduledCells();
@@ -45,6 +48,9 @@ describe('01_ObsValueCell_ObsMap', () => {
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
 
+    /**
+     * delete
+     */
     result = value.delete('hello');
     expect(result).True();
     actualizeScheduledCells();
@@ -53,12 +59,35 @@ describe('01_ObsValueCell_ObsMap', () => {
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
 
+    /**
+     * clear
+     */
     value.clear();
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
     expect(rootCell.value.size).eq(0);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
+
+    /**
+     * set-prop / delete-prop
+     */
+    value['hello'] = 123;
+    actualizeScheduledCells();
+    expect(rootOnChange).toBeCalledTimes(1);
+    expect(rootCell.value.size).eq(0);
+    expect(value).toHaveProperty('hello', 123)
+    checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
+    checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
+
+    delete value['hello'];
+    actualizeScheduledCells();
+    expect(rootOnChange).toBeCalledTimes(1);
+    expect(rootCell.value.size).eq(0);
+    expect(value).not.toHaveProperty('hello');
+    checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
+    checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
+
 
     rootCell.offChange(rootOnChange);
     expect(rootOnChange).toBeCalledTimes(1);
