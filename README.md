@@ -315,9 +315,9 @@ b.on('change', ({value}) => {
 # TODO
 
 - observable things:
+  - ObsObject,
   - ObsList,
   - ObsSet,
-  - ObsObject,
 - filter
 
 # Inspired by
