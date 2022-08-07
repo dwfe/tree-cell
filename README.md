@@ -167,7 +167,7 @@ As you probably already noticed, it is required to annotate the object propertie
 The following annotations are available:
 
 - `asyncCell` – binds a property to a cell of type `AsyncCell` – the cell whose value can change asynchronously. The passed function is expected to return a value of one of the following types: `Promise`, `AsyncIterable` or `Iterable`. Or you can set value of these types directly to the property.
-- `obsValueCell` – binds a property to a cell of type `ObsValueCell` – the cell whose value can be observable. The cell listens for Changes of value and propagates them. Observable values are created using functions: ``
+- `obsValueCell` – binds a property to a cell of type `ObsValueCell` – the cell whose value can be observable. The cell listens for Changes of value and propagates them. Observable values are created using functions: `createObsArray`, `createObsMap`.
 - `cell` – binds a property to a cell of type `Cell` – if the previous annotation options didn't suit you, then just use this one.
 
 # What properties can be annotated
@@ -313,9 +313,9 @@ b.on('change', ({value}) => {
 # TODO
 
 - observable things:
-  - ObsArray,
-  - ObsObject,
+  - ObsList,
   - ObsSet,
+  - ObsObject,
 - filter
 
 # Inspired by
