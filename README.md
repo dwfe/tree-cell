@@ -65,8 +65,8 @@ output:
 if comment out `actualizeScheduledCells();` then the output will be like this:
 
 ```shell
-2
-8
+2 // autorun
+8 // result of auto-actualization of the observed cell tree
 ```
 
 this is because when multiple state changes happen:
