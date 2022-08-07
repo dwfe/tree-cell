@@ -81,6 +81,8 @@ obj.increment();
 
 by default, only the latest state is taken into account at the moment changes are applied.
 
+It is this approach that makes it possible to speed up the program at times.
+
 ---
 
 > ⚠ New changes will be applied only after changes stop happening in **the observed cell tree**.
