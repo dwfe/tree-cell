@@ -254,6 +254,48 @@ describe('03_ObsValueCell_ObsArray', () => {
     expect(callCount).eq(24);
     expect(rootOnChange).toBeCalledTimes(1);
     checkValue(rootCell, [1, 5, '9', 40, '80', 200, '700']);
+
+    /**
+     * splice
+     */
+    result = arr.splice(3, 10, 'hello', 'world');
+    checkValue(result, [40, '80', 200, '700']);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(5);
+    expect(callCount).eq(25);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [1, 5, '9', 'hello', 'world']);
+
+    result = arr.splice(0);
+    checkValue(result, [1, 5, '9', 'hello', 'world']);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(0);
+    expect(callCount).eq(26);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    /**
+     * unshift
+     */
+    result = arr.unshift('word');
+    expect(result).eq(1);
+    actualizeScheduledCells();
+    expect(callCount).eq(27);
+    expect(rootOnChange).toBeCalledTimes(1);
+    expect(rootCell.value.length).eq(1);
+    checkValue(rootCell, ['word']);
+    checkFields(rootCell, [arr, true, true, 1, 0, true, true, false]);
+    checkFields(obsCell, [arr, true, true, 0, 1, false, false, false]);
+
+    result = arr.unshift(1, null, 'hello', false);
+    expect(result).eq(5);
+    actualizeScheduledCells();
+    expect(callCount).eq(28);
+    expect(rootOnChange).toBeCalledTimes(1);
+    expect(rootCell.value.length).eq(5);
+    checkValue(rootCell, [1, null, 'hello', false, 'word']);
+    checkFields(rootCell, [arr, true, true, 1, 0, true, true, false]);
+    checkFields(obsCell, [arr, true, true, 0, 1, false, false, false]);
   });
 
 });
