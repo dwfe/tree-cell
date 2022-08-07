@@ -179,6 +179,81 @@ describe('03_ObsValueCell_ObsArray', () => {
     expect(rootOnChange).toBeCalledTimes(1);
     checkValue(rootCell, [1, 4, 3]);
 
+    /**
+     * reverse
+     */
+    result = arr.reverse();
+    expect(result).eq(arr);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(3);
+    expect(callCount).eq(17);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [3, 4, 1]);
+
+    /**
+     * shift
+     */
+    result = arr.shift();
+    expect(result).eq(3);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(2);
+    expect(callCount).eq(18);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [4, 1]);
+
+    result = arr.shift();
+    expect(result).eq(4);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(1);
+    expect(callCount).eq(19);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [1]);
+
+    result = arr.shift();
+    expect(result).eq(1);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(0);
+    expect(callCount).eq(20);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    result = arr.shift();
+    expect(result).eq(undefined);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(0);
+    expect(callCount).eq(20);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, []);
+
+    /**
+     * sort
+     */
+    arr.length = 0;
+    actualizeScheduledCells();
+    expect(callCount).eq(21);
+    checkValue(rootCell, []);
+    arr.push('80', '9', '700', 40, 1, 5, 200);
+    actualizeScheduledCells();
+    expect(callCount).eq(22);
+    checkValue(rootCell, ['80', '9', '700', 40, 1, 5, 200]);
+
+    result = arr.sort();
+    checkValue(result, [1, 200, 40, 5, '700', '80', '9']);
+    expect(result).eq(arr);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(7);
+    expect(callCount).eq(23);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [1, 200, 40, 5, '700', '80', '9']);
+
+    result = arr.sort((a, b) => a - b);
+    checkValue(result, [1, 5, '9', 40, '80', 200, '700']);
+    expect(result).eq(arr);
+    actualizeScheduledCells();
+    expect(rootCell.value.length).eq(7);
+    expect(callCount).eq(24);
+    expect(rootOnChange).toBeCalledTimes(1);
+    checkValue(rootCell, [1, 5, '9', 40, '80', 200, '700']);
   });
 
 });
