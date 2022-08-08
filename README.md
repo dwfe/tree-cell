@@ -65,7 +65,7 @@ output:
 if comment out `actualizeScheduledCells();` then the output will be like this:
 
 ```shell
-2 // autorun
+2 // autorun => create observable cell tree
 8 // result of auto-actualization of the observed cell tree
 ```
 
