@@ -51,6 +51,8 @@ export interface ICellOpt<TValue> {
 
   tap?: (change: EventChangeListenerParam<TValue>) => void; // transparently perform actions or side-effects after changing the cell state, such as logging
 
+  filter?: (value: TValue) => boolean;
+
 }
 
 export type IAsyncCellOpt<TValue> = ICellOpt<TValue> & {

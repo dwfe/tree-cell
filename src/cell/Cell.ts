@@ -37,6 +37,7 @@ export class Cell<TValue = any>
   equalsMapping: ICellOpt<TValue>['equalsMapping'];
   onChangedFromOutside: ICellOpt<TValue>['onChangedFromOutside'];
   tap: ICellOpt<TValue>['tap'];
+  filter: ICellOpt<TValue>['filter'];
 
   constructor(val: Fn<TValue> | TValue,
               opt: ICellOpt<TValue> = {}) {
@@ -283,6 +284,7 @@ export class Cell<TValue = any>
     this.equalsMapping = opt.equalsMapping;
     this.onChangedFromOutside = opt.onChangedFromOutside;
     this.tap = opt.tap;
+    this.filter = opt.filter;
   }
 
 
