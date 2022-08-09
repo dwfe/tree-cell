@@ -1,6 +1,6 @@
 import {delayAsync} from '@do-while-for-each/common';
 import {EventChangeValueListenerParam, Fn, IAsyncCellOpt, IAsyncSource} from '../contract';
-import {validForAsyncCellSourceValue} from './util';
+import {validForAsyncCellSourceValue} from './var-data-cell.detectors';
 import {Cell} from './Cell';
 
 /**

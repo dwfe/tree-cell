@@ -1,7 +1,7 @@
 import {EventEmitter, Listener} from '@do-while-for-each/common';
 import {EventChangeListenerParam, EventChangeValueListenerParam, Fn, ICell, ICellOpt, IError} from '../contract';
 import {actualizeScheduledCells, isCellScheduled, scheduleRootCellActualization} from '../sheduler';
-import {couldBeAssociatedToVariableDataCell} from './util';
+import {couldBeAssociatedToVariableDataCell} from './var-data-cell.detectors';
 
 let nowExecCell: undefined | ICell; // the cell whose fn is currently being executed
 
@@ -112,6 +112,10 @@ export class Cell<TValue = any>
 //region Change the state of this cell
 
   protected process(value: TValue, error?: any): boolean {
+    if (error === undefined &&
+      !this.canValueBeAccepted(value)) {
+      error = this.getValueAcceptanceError(value);
+    }
     if (error !== undefined) {
       this.changeError(error);
       return true;
@@ -161,12 +165,18 @@ export class Cell<TValue = any>
     if (typeof val === 'function') {
       this.fn = val as Fn<TValue>;
       this.value = undefined as unknown as TValue;
+      this.error = null;
       this.isActual = false;
     } else {
-      this.value = val;
+      if (this.canValueBeAccepted(val)) {
+        this.value = val;
+        this.error = null;
+      } else {
+        this.value = undefined as unknown as TValue;
+        this.error = this.getValueAcceptanceError(val);
+      }
       this.isActual = true;
     }
-    this.error = null;
   }
 
 //endregion Change state of this cell
@@ -257,15 +267,6 @@ export class Cell<TValue = any>
 //endregion Events wrap
 
 
-  private handleEdgeCasesOnProcessingSameValue(): void {
-    if (this.error) { // if the new value doesn't change the value of this cell, but previous state change resulted in error
-      this.clearError();
-    }
-    if (couldBeAssociatedToVariableDataCell(this))
-      this.isActual = true;
-  }
-
-
   protected scheduleRootCellActualization(): void {
     for (const reaction of this.reactions)
       scheduleRootCellActualization(reaction);
@@ -279,6 +280,15 @@ export class Cell<TValue = any>
     }
   }
 
+  private handleEdgeCasesOnProcessingSameValue(): void {
+    if (this.error) { // if the new value doesn't change the value of this cell, but previous state change resulted in error
+      this.clearError();
+    }
+    if (couldBeAssociatedToVariableDataCell(this))
+      this.isActual = true;
+  }
+
+
   private setOptions(opt: ICellOpt<TValue>): void {
     this.isEqual = opt.isEqual;
     this.equalsMapping = opt.equalsMapping;
@@ -286,6 +296,19 @@ export class Cell<TValue = any>
     this.tap = opt.tap;
     this.filter = opt.filter;
   }
+
+
+//region Value acceptance
+
+  private canValueBeAccepted(value: TValue): boolean {
+    return this.filter ? this.filter(value) : true;
+  }
+
+  private getValueAcceptanceError(value: TValue) {
+    return new ValueAcceptanceError(value, this);
+  }
+
+//endregion Value acceptance
 
 
   equals(value: TValue): boolean {
@@ -307,5 +330,12 @@ export class Cell<TValue = any>
 export class CyclicExecutionError extends Error {
   constructor(public cell: ICell) {
     super('cyclic execution of cell.fn was detected');
+  }
+}
+
+export class ValueAcceptanceError extends Error {
+  constructor(public value: any,
+              public cell: Cell) {
+    super(`Cell did not accept value: ${value}`);
   }
 }
