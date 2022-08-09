@@ -27,17 +27,17 @@ export function validForAsyncCellSourceValue(value: any): boolean {
  *
  * CASE(1) rootCell.value.canBeObservable
  *
- *   const rootCell = new Cell(() => mapCell.get());
  *   const mapCell = new ObsValueCell(createObsMap());
+ *   const rootCell = new Cell(() => mapCell.get());
  *----------------------------------------------------------------------
  *
  * CASE(2) rootCell.fn -> dep.value.canBeObservable
  *
+ *  const mapCell = new ObsValueCell(createObsMap());
  *   const rootCell = new Cell(() => {
  *     const emitter = mapCell.get();
  *     return emitter.size;
  *   });
- *   const mapCell = new ObsValueCell(createObsMap());
  */
 export function couldBeAssociatedToObsValueCell(reactionCell: ICell): boolean {
   return (
