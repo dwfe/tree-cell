@@ -112,9 +112,8 @@ export class Cell<TValue = any>
 //region Change the state of this cell
 
   protected process(value: TValue, error?: any): boolean {
-    if (error === undefined &&
-      !this.canValueBeAccepted(value)) {
-      error = this.getValueAcceptanceError(value);
+    if (error === undefined && this.filter && !this.filter(value)) {
+      error = new ValueAcceptanceError(value, this);
     }
     if (error !== undefined) {
       this.changeError(error);
@@ -163,17 +162,17 @@ export class Cell<TValue = any>
 
   private initState(val: Fn<TValue> | TValue): void {
     if (typeof val === 'function') {
-      this.fn = val as Fn<TValue>;
       this.value = undefined as unknown as TValue;
       this.error = null;
       this.isActual = false;
+      this.fn = val as Fn<TValue>;
     } else {
-      if (this.canValueBeAccepted(val)) {
+      if (this.filter && !this.filter(val)) {
+        this.value = undefined as unknown as TValue;
+        this.error = new ValueAcceptanceError(val, this);
+      } else {
         this.value = val;
         this.error = null;
-      } else {
-        this.value = undefined as unknown as TValue;
-        this.error = this.getValueAcceptanceError(val);
       }
       this.isActual = true;
     }
@@ -296,19 +295,6 @@ export class Cell<TValue = any>
     this.tap = opt.tap;
     this.filter = opt.filter;
   }
-
-
-//region Value acceptance
-
-  private canValueBeAccepted(value: TValue): boolean {
-    return this.filter ? this.filter(value) : true;
-  }
-
-  private getValueAcceptanceError(value: TValue) {
-    return new ValueAcceptanceError(value, this);
-  }
-
-//endregion Value acceptance
 
 
   equals(value: TValue): boolean {
