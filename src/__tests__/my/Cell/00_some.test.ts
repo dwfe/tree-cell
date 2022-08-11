@@ -1,10 +1,10 @@
 import {delayAsync} from '@do-while-for-each/common';
-import {actualizeScheduledCells, Cell} from '../../..';
 import {checkFields, lastValueChangeResult} from '../../util';
+import {actualizeScheduledCells, Cell} from '../../..';
 
 describe('00_some', () => {
 
-  test('batch changes', () => {
+  test('debounce changes', () => {
     const firstName = new Cell('Tom');
     const lastName = new Cell('Cat');
     const fullName = new Cell(() => firstName.get() + ' ' + lastName.get());
