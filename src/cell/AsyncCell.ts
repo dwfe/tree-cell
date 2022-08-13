@@ -4,7 +4,7 @@ import {validForAsyncCellSourceValue} from './var-data-cell.detectors';
 import {Cell} from './Cell';
 
 /**
- * The cell whose value can change asynchronously.
+ * The cell whose value changes asynchronously.
  * The first value returned by AsyncCell is always:
  *   - null;
  *   - or the value passed in the "startWith" option.
