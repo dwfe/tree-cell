@@ -271,7 +271,7 @@ Here `name` and `kind` are data cells. And `fullCell` is a function-based cell o
 ### 1. Filtering the resulting cell value
 
 RxJS has a wonderful `filter` operator. In the ideology of cells, it is impossible to apply the same filter to the resulting value.  
-Consider an example. Let's say a mechanism for filtering cell values is implemented:
+Consider an example:
 
 ```typescript
 const a = new Cell(1);
@@ -282,11 +282,12 @@ console.log(b.get()); // what will be displayed in the console?
 
 The value of cell `a` has changed, while `b` depends on `a` and must also change, otherwise `b` becomes invalid.  
 Accordingly, one cannot simply ignore the change in `a` just because the filter `b` does not pass the result.  
-The only way out is **to throw an error** (but this is a very specific solution to the problem).
+The only way out is **to throw an error**.
 
 _"How then to be? I need regular filters that don't throw an error"_
 
-The filtering logic must be implemented in the subscription to the cell you are interested in:
+1. Don't use a filter on cells.
+2. The filtering logic must be implemented in the subscription to the cell you are interested in:
 
 ```typescript
 const a = new Cell(1);
@@ -318,7 +319,6 @@ b.on('change', ({value}) => {
   - ObsObject,
   - ObsList,
   - ObsSet,
-- filter
 
 # Inspired by
 

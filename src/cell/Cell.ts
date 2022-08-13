@@ -41,7 +41,7 @@ export class Cell<TValue = any>
 
   constructor(val: Fn<TValue> | TValue,
               opt: ICellOpt<TValue> = {}) {
-    super(); // EventEmitter
+    super(); // activate EventEmitter
     this.setOptions(opt);
     this.initState(val);
   }
