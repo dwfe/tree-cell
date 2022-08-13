@@ -83,7 +83,7 @@ by default, only the latest state is taken into account at the moment changes ar
 
 ---
 
-> ⚠ New changes will be applied only after changes stop happening in the observed cell tree.
+> ⚠ New changes will be applied only after changes stop happening in the system (after clearing the call stack).
 
 **It is this approach that makes it possible to speed up the program at times**.
 
