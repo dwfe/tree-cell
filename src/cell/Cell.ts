@@ -175,6 +175,7 @@ export class Cell<TValue = any>
         this.error = null;
       }
       this.isActual = true;
+      this.fn = undefined as unknown as Fn<TValue>;
     }
   }
 

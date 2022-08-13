@@ -62,8 +62,8 @@ describe('02_check-fields_error', () => {
     // перевожу в состояние ошибки
     s.set(7);
     actualizeScheduledCells();
-    checkFields(a, [20, true, true, 1, 0, true, true, {message: 'some err'}]);
-    checkFields(b, [20, true, true, 2, 1, true, true, {message: 'some err'}]);
+    checkFields(a, [20, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [20, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [8, true, false, 0, 0, false, false, false]);
     checkFields(s, [7, true, true, 0, 1, false, false, false]);
     checkFields(w, [12, true, true, 0, 1, false, false, false]);
@@ -76,8 +76,8 @@ describe('02_check-fields_error', () => {
     // дерево остается в состоянии ошибки после изменения зависимости
     s.set(6);
     actualizeScheduledCells();
-    checkFields(a, [20, true, true, 1, 0, true, true, {message: 'some err'}]);
-    checkFields(b, [20, true, true, 2, 1, true, true, {message: 'some err'}]);
+    checkFields(a, [20, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [20, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [8, true, false, 0, 0, false, false, false]);
     checkFields(s, [6, true, true, 0, 1, false, false, false]);
     checkFields(w, [12, true, true, 0, 1, false, false, false]);
@@ -103,8 +103,8 @@ describe('02_check-fields_error', () => {
     // перевожу в состояние ошибки
     s.set(10);
     actualizeScheduledCells();
-    checkFields(a, [20, true, true, 1, 0, true, true, {message: 'some err'}]);
-    checkFields(b, [20, true, true, 2, 1, true, true, {message: 'some err'}]);
+    checkFields(a, [20, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [20, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [8, true, false, 0, 0, false, false, false]);
     checkFields(s, [10, true, true, 0, 1, false, false, false]);
     checkFields(w, [12, true, true, 0, 1, false, false, false]);
@@ -118,8 +118,8 @@ describe('02_check-fields_error', () => {
     // эта зависимость влияет на будущее значние ячейки b
     w.set(9);
     actualizeScheduledCells();
-    checkFields(a, [20, true, true, 1, 0, true, true, {message: 'some err'}]);
-    checkFields(b, [20, true, true, 2, 1, true, true, {message: 'some err'}]);
+    checkFields(a, [20, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [20, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [8, true, false, 0, 0, false, false, false]);
     checkFields(s, [10, true, true, 0, 1, false, false, false]);
     checkFields(w, [9, true, true, 0, 1, false, false, false]);
@@ -203,8 +203,8 @@ describe('02_check-fields_error', () => {
     expect(cOnError).toBeCalledTimes(0);
     expect(sOnError).toBeCalledTimes(0);
     expect(wOnError).toBeCalledTimes(0);
-    checkFields(a, [22, true, true, 1, 0, true, true, true]);
-    checkFields(b, [22, true, true, 2, 1, true, true, true]);
+    checkFields(a, [22, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [22, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [7, true, true, 0, 0, false, false, false]);
     checkFields(s, [9, true, true, 0, 1, false, false, false]);
     checkFields(w, [15, true, true, 0, 1, false, false, false]);
@@ -221,8 +221,8 @@ describe('02_check-fields_error', () => {
     expect(cOnError).toBeCalledTimes(0);
     expect(sOnError).toBeCalledTimes(0);
     expect(wOnError).toBeCalledTimes(0);
-    checkFields(a, [22, true, true, 1, 0, true, true, true]);
-    checkFields(b, [22, true, true, 2, 1, true, true, true]);
+    checkFields(a, [22, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [22, true, true, 2, 1, true, true, 'some err']);
     checkFields(c, [7, true, false, 0, 0, false, false, false]);
     checkFields(s, [9, true, true, 0, 1, false, false, false]);
     checkFields(w, [15, true, true, 0, 1, false, false, false]);
@@ -270,9 +270,9 @@ describe('02_check-fields_error', () => {
     c.onError(cOnError);
     checkFields(c, [7, true, true, 0, 0, false, false, false]);
     b.onError(bOnError);
-    checkFields(b, [undefined, true, true, 1, 0, true, true, true]);
+    checkFields(b, [undefined, true, true, 1, 0, true, true, 'some err']);
     a.onError(aOnError);
-    checkFields(a, [undefined, true, true, 1, 0, true, true, true]);
+    checkFields(a, [undefined, true, true, 1, 0, true, true, 'some err']);
     a.onChange(aOnChange);
 
     expect(aOnChange).toBeCalledTimes(0);
@@ -280,8 +280,8 @@ describe('02_check-fields_error', () => {
     expect(bOnError).toBeCalledTimes(1);
     expect(cOnError).toBeCalledTimes(0);
     expect(wOnError).toBeCalledTimes(0);
-    checkFields(a, [undefined, true, true, 1, 0, true, true, true]);
-    checkFields(b, [undefined, true, true, 1, 1, true, true, true]);
+    checkFields(a, [undefined, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [undefined, true, true, 1, 1, true, true, 'some err']);
     checkFields(c, [7, true, true, 0, 0, false, false, false]);
     checkFields(w, [15, true, true, 0, 1, false, false, false]);
 
@@ -293,8 +293,8 @@ describe('02_check-fields_error', () => {
     expect(bOnError).toBeCalledTimes(1);
     expect(cOnError).toBeCalledTimes(0);
     expect(wOnError).toBeCalledTimes(0);
-    checkFields(a, [undefined, true, true, 1, 0, true, true, true]);
-    checkFields(b, [undefined, true, true, 1, 1, true, true, true]);
+    checkFields(a, [undefined, true, true, 1, 0, true, true, 'some err']);
+    checkFields(b, [undefined, true, true, 1, 1, true, true, 'some err']);
     checkFields(c, [7, true, false, 0, 0, false, false, false]);
     checkFields(w, [15, true, true, 0, 1, false, false, false]);
   });

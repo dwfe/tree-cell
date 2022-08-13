@@ -75,8 +75,8 @@ describe('02_AsyncCell_fn_Promise_error', () => {
     expect(rootOnChange).toBeCalledTimes(3);
     expect(rootOnValue).toBeCalledTimes(1);
     expect(rootOnError).toBeCalledTimes(1);
-    checkFields(rootCell, ['m[5] request ok', true, true, 1, 0, true, true, {message: 'err request to the server'}]);
-    checkFields(asyncCell, ['m[5] request ok', true, true, 0, 1, false, false, {message: 'err request to the server'}]);
+    checkFields(rootCell, ['m[5] request ok', true, true, 1, 0, true, true, 'err request to the server']);
+    checkFields(asyncCell, ['m[5] request ok', true, true, 0, 1, false, false, 'err request to the server']);
     checkFields(sourceCell, [Check.SKIP, true, true, 3, 0, true, true, false]);
     expect(sourceCell.value).not.eq(sourceValue);
     sourceValue = sourceCell.value;
@@ -101,8 +101,8 @@ describe('02_AsyncCell_fn_Promise_error', () => {
     expect(rootOnChange).toBeCalledTimes(4);
     expect(rootOnValue).toBeCalledTimes(1);
     expect(rootOnError).toBeCalledTimes(2);
-    checkFields(rootCell, ['m[5] request ok', true, true, 1, 0, true, true, {message: 'err inside of tree'}]);
-    checkFields(asyncCell, ['m[5] request ok', true, true, 0, 1, false, false, {message: 'err inside of tree'}]);
+    checkFields(rootCell, ['m[5] request ok', true, true, 1, 0, true, true, 'err inside of tree']);
+    checkFields(asyncCell, ['m[5] request ok', true, true, 0, 1, false, false, 'err inside of tree']);
     checkFields(sourceCell, [Check.SKIP, true, true, 2, 0, true, true, false]);
     expect(sourceCell.value).not.eq(sourceValue);
     sourceValue = sourceCell.value;
@@ -127,8 +127,8 @@ describe('02_AsyncCell_fn_Promise_error', () => {
     expect(rootOnChange).toBeCalledTimes(6);
     expect(rootOnValue).toBeCalledTimes(2);
     expect(rootOnError).toBeCalledTimes(3);
-    checkFields(rootCell, ['m[1] request ok', true, true, 1, 0, true, true, {message: 'err inside of tree'}]);
-    checkFields(asyncCell, ['m[1] request ok', true, true, 0, 1, false, false, {message: 'err inside of tree'}]);
+    checkFields(rootCell, ['m[1] request ok', true, true, 1, 0, true, true, 'err inside of tree']);
+    checkFields(asyncCell, ['m[1] request ok', true, true, 0, 1, false, false, 'err inside of tree']);
     checkFields(sourceCell, [Check.SKIP, true, true, 2, 0, true, true, false]);
     expect(sourceCell.value).not.eq(sourceValue);
     sourceValue = sourceCell.value;
@@ -139,8 +139,8 @@ describe('02_AsyncCell_fn_Promise_error', () => {
     expect(rootOnChange).toBeCalledTimes(6);
     expect(rootOnValue).toBeCalledTimes(2);
     expect(rootOnError).toBeCalledTimes(3);
-    checkFields(rootCell, ['m[1] request ok', false, false, 0, 0, false, false, {message: 'err inside of tree'}]);
-    checkFields(asyncCell, ['m[1] request ok', true, false, 0, 0, false, false, {message: 'err inside of tree'}]);
+    checkFields(rootCell, ['m[1] request ok', false, false, 0, 0, false, false, 'err inside of tree']);
+    checkFields(asyncCell, ['m[1] request ok', true, false, 0, 0, false, false, 'err inside of tree']);
     checkFields(sourceCell, [Check.SKIP, false, false, 0, 0, false, false, false]);
     expect(sourceCell.value).eq(sourceValue);
 
@@ -151,8 +151,8 @@ describe('02_AsyncCell_fn_Promise_error', () => {
     expect(rootOnChange).toBeCalledTimes(6);
     expect(rootOnValue).toBeCalledTimes(2);
     expect(rootOnError).toBeCalledTimes(4);
-    checkFields(rootCell, ['m[1] request ok', true, true, 1, 0, true, true, {message: 'err inside of tree'}]);
-    checkFields(asyncCell, ['m[1] request ok', true, true, 0, 1, false, false, {message: 'err inside of tree'}]);
+    checkFields(rootCell, ['m[1] request ok', true, true, 1, 0, true, true, 'err inside of tree']);
+    checkFields(asyncCell, ['m[1] request ok', true, true, 0, 1, false, false, 'err inside of tree']);
     checkFields(sourceCell, [Check.SKIP, true, true, 2, 0, true, true, false]);
     expect(sourceCell.value).not.eq(sourceValue);
     sourceValue = sourceCell.value;

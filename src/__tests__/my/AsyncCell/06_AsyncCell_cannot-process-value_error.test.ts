@@ -39,8 +39,8 @@ describe('06_AsyncCell_cannot-process-value_error', () => {
     expect(rootOnChange).toBeCalledTimes(2);
     expect(rootOnValue).toBeCalledTimes(0);
     expect(rootOnError).toBeCalledTimes(1);
-    checkFields(rootCell, [null, true, true, 1, 0, true, true, {message}]);
-    checkFields(asyncCell, [null, true, true, 0, 1, false, false, {message}]);
+    checkFields(rootCell, [null, true, true, 1, 0, true, true, message]);
+    checkFields(asyncCell, [null, true, true, 0, 1, false, false, message]);
     checkFields(sourceCell, [123, true, true, 1, 0, true, true, false]);
 
     // останов
@@ -50,8 +50,8 @@ describe('06_AsyncCell_cannot-process-value_error', () => {
     expect(rootOnChange).toBeCalledTimes(2);
     expect(rootOnValue).toBeCalledTimes(0);
     expect(rootOnError).toBeCalledTimes(1);
-    checkFields(rootCell, [null, false, false, 0, 0, false, false, {message}]);
-    checkFields(asyncCell, [null, true, false, 0, 0, false, false, {message}]);
+    checkFields(rootCell, [null, false, false, 0, 0, false, false, message]);
+    checkFields(asyncCell, [null, true, false, 0, 0, false, false, message]);
     checkFields(sourceCell, [123, false, false, 0, 0, false, false, false]);
 
     // возобновить наблюдение
@@ -61,8 +61,8 @@ describe('06_AsyncCell_cannot-process-value_error', () => {
     expect(rootOnChange).toBeCalledTimes(2);
     expect(rootOnValue).toBeCalledTimes(0);
     expect(rootOnError).toBeCalledTimes(2);
-    checkFields(rootCell, [null, true, true, 1, 0, true, true, {message}]);
-    checkFields(asyncCell, [null, true, true, 0, 1, false, false, {message}]);
+    checkFields(rootCell, [null, true, true, 1, 0, true, true, message]);
+    checkFields(asyncCell, [null, true, true, 0, 1, false, false, message]);
     checkFields(sourceCell, [123, true, true, 1, 0, true, true, false]);
     Throw(() => rootCell.get(), message);
 
@@ -73,8 +73,8 @@ describe('06_AsyncCell_cannot-process-value_error', () => {
     expect(rootOnChange).toBeCalledTimes(2);
     expect(rootOnValue).toBeCalledTimes(0);
     expect(rootOnError).toBeCalledTimes(2);
-    checkFields(rootCell, [null, false, false, 0, 0, false, false, {message}]);
-    checkFields(asyncCell, [null, true, false, 0, 0, false, false, {message}]);
+    checkFields(rootCell, [null, false, false, 0, 0, false, false, message]);
+    checkFields(asyncCell, [null, true, false, 0, 0, false, false, message]);
     checkFields(sourceCell, [123, false, false, 0, 0, false, false, false]);
   });
 
