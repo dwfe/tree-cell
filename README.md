@@ -65,8 +65,8 @@ output:
 if comment out `actualizeScheduledCells();` then the output will be like this:
 
 ```shell
-2 // autorun => create observable cell tree
-8 // result of auto-actualization of the observed cell tree
+2 // autorun => creating the observable cell tree
+8 // result of auto-actualization of the observable cell tree
 ```
 
 this is because when multiple state changes happen:
@@ -84,8 +84,6 @@ by default, only the latest state is taken into account at the moment changes ar
 ---
 
 > ⚠ New changes will be applied only after changes stop happening in the system (after clearing the call stack).
-
-**It is this approach that makes it possible to speed up the program at times**.
 
 Thus, if you don't need this kind of debouncing, then call function `actualizeScheduledCells();` in appropriate places.
 
@@ -257,7 +255,7 @@ Here `name` and `kind` are data cells. And `fullCell` is a function-based cell o
 
 ## Advantages of tree-cell
 
-1. Acceptance of changes in **the observed cell tree** always happens in a [nextTick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#process-nexttick)(in the Node.js environment) or in a [microtask](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)(in the browser environment).
+1. Acceptance of changes in **the observable cell tree** always happens in a [nextTick](https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick/#process-nexttick)(in the Node.js environment) or in a [microtask](https://developer.mozilla.org/en-US/docs/Web/API/queueMicrotask)(in the browser environment).
 2. As a consequence of (1), by default **tree-cell** automatically debounce changes. Debouncing speeds up the program, because interim changes are not applied.
 3. In most cases, it is not necessary to control subscriptions/unsubscribing. Everything happens automatically based on just your code.
 4. Also, all sorts of merging/switching streams become unnecessary, for example, such: `merge`, `switchMap`, `combineLatest`, etc.

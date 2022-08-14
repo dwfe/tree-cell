@@ -7,14 +7,20 @@ describe('01_ObsValueCell_ObsMap', () => {
 
   test('value', () => {
     const value = createObsMap();
-    const rootCell = new Cell(() => obsCell.get());
+    let callCount = 0;
+    const rootCell = new Cell(() => {
+      callCount++;
+      return obsCell.get();
+    });
     const obsCell = new ObsValueCell(value);
+    expect(callCount).eq(0);
     checkSupport(value, 0, false);
     checkSupport(obsCell.value, 0, false);
 
     const rootOnChange = jest.fn();
     rootCell.onChange(rootOnChange);
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(1);
     checkSupport(value, 1, true, 1);
     checkSupport(obsCell.value, 1, true, 1);
     expect(rootCell.value.size).eq(0);
@@ -28,6 +34,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     expect(result).eq(value);
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(2);
     expect(rootCell.value.size).eq(1);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
@@ -36,6 +43,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     expect(result).eq(value);
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(3);
     expect(rootCell.value.size).eq(1);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
@@ -44,6 +52,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     expect(result).eq(value);
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(4);
     expect(rootCell.value.size).eq(2);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
@@ -55,6 +64,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     expect(result).True();
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(5);
     expect(rootCell.value.size).eq(1);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
@@ -65,6 +75,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     value.clear();
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(6);
     expect(rootCell.value.size).eq(0);
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
@@ -75,6 +86,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     value['hello'] = 123;
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(7);
     expect(rootCell.value.size).eq(0);
     expect(value).toHaveProperty('hello', 123)
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
@@ -83,6 +95,7 @@ describe('01_ObsValueCell_ObsMap', () => {
     delete value['hello'];
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(8);
     expect(rootCell.value.size).eq(0);
     expect(value).not.toHaveProperty('hello');
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
@@ -91,6 +104,7 @@ describe('01_ObsValueCell_ObsMap', () => {
 
     rootCell.offChange(rootOnChange);
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(8);
     checkSupport(value, 0, false);
     checkSupport(obsCell.value, 0, false);
     expect(rootCell.value.size).eq(0);
@@ -99,6 +113,7 @@ describe('01_ObsValueCell_ObsMap', () => {
 
     rootCell.onChange(rootOnChange);
     expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(9);
     expect(rootCell.value.size).eq(0);
     checkSupport(value, 1, true, 1);
     checkSupport(obsCell.value, 1, true, 1);

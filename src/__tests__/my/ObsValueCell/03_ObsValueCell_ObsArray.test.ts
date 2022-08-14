@@ -308,11 +308,11 @@ function checkValue(cell: ICell, arr: any[]) {
   }
 }
 
-export function checkSupport(arr: ObsValueLike, numberOfIds: number, hasListeners: boolean, numberOfListeners?: number) {
-  expect(arr.numberOfIds).eq(numberOfIds);
-  expect(arr.hasListeners).eq(hasListeners);
+export function checkSupport(obsValue: ObsValueLike, numberOfIds: number, hasListeners: boolean, numberOfListeners?: number) {
+  expect(obsValue.numberOfIds).eq(numberOfIds);
+  expect(obsValue.hasListeners).eq(hasListeners);
   if (numberOfListeners === undefined)
-    Throw(() => arr.numberOfListeners(), `Cannot read properties of undefined (reading 'size')`);
+    Throw(() => obsValue.numberOfListeners(), `Cannot read properties of undefined (reading 'size')`);
   else
-    expect(arr.numberOfListeners()).eq(numberOfListeners);
+    expect(obsValue.numberOfListeners()).eq(numberOfListeners);
 }
