@@ -315,7 +315,6 @@ b.on('change', ({value}) => {
 
 - observable things:
   - ObsSet,
-  - ObsList,
 
 # Inspired by
 
