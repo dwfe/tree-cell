@@ -39,6 +39,15 @@ describe('01_ObsValueCell_ObsMap', () => {
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
 
+    result = value.set('hello', 17);
+    expect(result).eq(value);
+    actualizeScheduledCells();
+    expect(rootOnChange).toBeCalledTimes(1);
+    expect(callCount).eq(2);
+    expect(rootCell.value.size).eq(1);
+    checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
+    checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
+
     result = value.set('hello', 'ok');
     expect(result).eq(value);
     actualizeScheduledCells();
