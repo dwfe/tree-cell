@@ -83,7 +83,7 @@ by default, only the latest state is taken into account at the moment changes ar
 
 ---
 
-> ⚠ New changes will be applied only after changes stop happening in the system (after clearing the call stack).
+> ⚠ New changes will be applied automatically only after changes stop happening in the system (after clearing the call stack).
 
 Thus, if you don't need this kind of debouncing, then call function `actualizeScheduledCells();` in appropriate places.
 
