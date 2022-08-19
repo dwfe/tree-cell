@@ -1,3 +1,4 @@
+// @formatter:off
 import {Cell} from '../cell/Cell';
 
 export type IAnnotation = 'cell' | 'asyncCell' | 'obsValueCell';
@@ -9,6 +10,5 @@ export interface ICellInit {
 
 export interface Dispose {
   (): void;
-
   rootCell: Cell;
 }

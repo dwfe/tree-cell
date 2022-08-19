@@ -1,7 +1,7 @@
 import {getPropDescriptor} from '@do-while-for-each/common';
 import {noThrow, Throw} from '@do-while-for-each/test';
-import {checkPossibilityOfUsing} from '../../../wrap/checkPossibilityOfUsing';
 import {fieldsInstance, fieldsObj, fieldsSimple} from './util/fields-simple';
+import {checkPossibilityOfUsing} from '../../../wrap/cache';
 import {IAnnotation} from '../../../wrap/contract';
 
 describe('01_checkPossibilityOfUsing', () => {
