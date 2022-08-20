@@ -38,7 +38,8 @@
     "test": "jest --config=src/__tests__/jest.config.js",
     "version": "npm run build && npm run test",
     "postversion": "git push",
-    "deploy": "npm version patch && npm publish"
+    "deploy": "npm version patch && npm publish",
+    "tgz": "npm run build && npm pack"
   },
   "publishConfig": {
     "access": "public"
