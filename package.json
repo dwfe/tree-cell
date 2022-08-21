@@ -25,7 +25,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@do-while-for-each/common": "file:../../common/do-while-for-each-common-1.2.46.tgz"
+    "@do-while-for-each/common": "1.x.x"
   },
   "devDependencies": {
     "@do-while-for-each/tsconfig": "1.x.x",
