@@ -68,7 +68,7 @@ export class Cell<TValue = any>
   set(value: TValue, error?: any): void {
     const oldValue = this.value;
     const processed = this.process(value, error);
-    if (this.onChangedFromOutside && processed)
+    if (processed && this.onChangedFromOutside)
       this.onChangedFromOutside(error ? {error} : {value, oldValue});
   }
 
