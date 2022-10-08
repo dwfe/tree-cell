@@ -28,8 +28,8 @@
     "@do-while-for-each/common": "1.2.47"
   },
   "devDependencies": {
-    "@do-while-for-each/tsconfig": "1.x.x",
-    "@do-while-for-each/test": "1.x.x"
+    "@do-while-for-each/tsconfig": "1.0.4",
+    "@do-while-for-each/test": "1.0.6"
   },
   "scripts": {
     "clean": "dwfeFs cleanDir . --fileNames=\"dist;node_modules;package-lock.json\"",
