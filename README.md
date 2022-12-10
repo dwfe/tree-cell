@@ -251,6 +251,41 @@ Jerry Mouse
 
 Here `name` and `kind` are data cells. And `fullCell` is a function-based cell or a computed cell.
 
+# Changing the dependency in the tree that is currently in the process of actualizing
+
+This function in `autorun` will run only once:
+
+```javascript
+const a = new Cell(() => b.get());
+const b = new Cell(1);
+autorun(() => {
+  const res = a.get(); // root -> a -> b
+  b.set(res + 1);      // and here we change b, oops..
+});
+```
+
+This behavior is done to avoid an infinite loop.  
+But sometimes there are situations when you just need to change the dependency in the tree that is currently in the process of actualizing.  
+To do this, you need to follow two rules:
+
+1. There must be a condition that breaks the infinite loop.
+2. Changes must occur in a microtask or macrotask.
+
+```javascript
+import {nextTick} from '@do-while-for-each/common';
+
+const a = new Cell(() => b.get());
+const b = new Cell(1);
+autorun(() => {
+  const res = a.get();
+  if ('some condition that breaks the infinite loop') {
+    nextTick(() => { // or setTimeout
+      b.set(res + 1); // and here we change b
+    });
+  }
+});
+```
+
 # tree-cell vs RxJS
 
 ## Advantages of tree-cell

@@ -1,6 +1,6 @@
 import {delayAsync} from '@do-while-for-each/common';
+import {actualizeScheduledCells, autorun, Cell} from '../../..';
 import {checkFields, lastValueChangeResult} from '../../util';
-import {actualizeScheduledCells, Cell} from '../../..';
 
 describe('00_some', () => {
 
@@ -64,6 +64,45 @@ describe('00_some', () => {
     await delayAsync(50);
     checkFields(a, [84, false, false, 0, 0, false, false, false]);
     checkFields(b, [84, true, false, 0, 0, false, false, false]);
+  });
+
+  test('изменение зависимости в дереве, которое сейчас находится в процессе актуализации. Не видит', () => {
+    const a = new Cell(() => b.get());
+    const b = new Cell(1);
+    let runCount = 0;
+    expect(b.value).eq(1);
+    expect(a.value).eq(undefined);
+    autorun(() => {
+      runCount++;
+      const res = a.get();
+      b.set(res + 1); // a -> b, и здесь мы меняем b
+    });
+
+    /**
+     * Сколько не актуализируй
+     * ячейка "a" не увидит изменение ячейки "b", т.к. изменение произошло
+     * в процессе актуализации root-ячейки того дерева, к которому принадлежат ячейки "a" и "b":
+     *   root -> a -> b
+     * Так сделано, чтобы избежать бесконечный цикл.
+     */
+    actualizeScheduledCells();
+    expect(runCount).eq(1);
+    expect(b.value).eq(2);
+    expect(a.value).eq(1);
+    actualizeScheduledCells();
+    expect(runCount).eq(1);
+    expect(b.value).eq(2);
+    expect(a.value).eq(1); // где моя двойка??
+
+    b.set(7);
+    actualizeScheduledCells();
+    expect(runCount).eq(2);
+    expect(b.value).eq(8);
+    expect(a.value).eq(7); // почему не 8?
+    actualizeScheduledCells();
+    expect(runCount).eq(2);
+    expect(b.value).eq(8);
+    expect(a.value).eq(7); // 8 не будет никогда?
   });
 
 });
