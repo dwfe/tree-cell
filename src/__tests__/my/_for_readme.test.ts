@@ -64,7 +64,7 @@ describe('Doubler', () => {
     actualizeScheduledCells();
     expect(runCount).eq(2);
     expect(runResult).eq(4);
-    checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
+    checkFields(rootCell, [undefined, true, true, 1, 0, true, true, false]);
 
     obj.increment();
     expect(runCount).eq(2);
@@ -74,7 +74,7 @@ describe('Doubler', () => {
     actualizeScheduledCells();
     expect(runCount).eq(3);
     expect(runResult).eq(6);
-    checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
+    checkFields(rootCell, [undefined, true, true, 1, 0, true, true, false]);
 
     obj.increment();
     expect(runCount).eq(3);
@@ -84,6 +84,38 @@ describe('Doubler', () => {
     dispose();
     expect(runCount).eq(4);
     expect(runResult).eq(8);
+    checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
+  });
+
+  test('dispose, when rootCell isActual === true', () => {
+    const obj = new Doubler(1);
+
+    let runCount = 0;
+    let runResult;
+
+    const dispose = autorun(() => {
+      runCount++;
+      runResult = obj.double;
+    });
+    expect(runCount).eq(1);
+    expect(runResult).eq(2);
+
+    const {rootCell} = dispose;
+    checkFields(rootCell, [undefined, true, true, 1, 0, true, true, false]);
+
+    obj.increment();
+    expect(runCount).eq(1);
+    expect(runResult).eq(2);
+    checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
+
+    actualizeScheduledCells();
+    expect(runCount).eq(2);
+    expect(runResult).eq(4);
+    checkFields(rootCell, [undefined, true, true, 1, 0, true, true, false]);
+
+    dispose();
+    expect(runCount).eq(2);
+    expect(runResult).eq(4);
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
   });
 

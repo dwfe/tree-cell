@@ -61,8 +61,9 @@ describe('07_check-fields', () => {
     checkFields(c, [undefined, false, false, 0, 0, false, false, false]);
 
     obj.b = null;
-    actualizeScheduledCells();
     checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
+    actualizeScheduledCells();
+    checkFields(rootCell, [undefined, true, true, 1, 0, true, true, false]);
     checkFields(a, [1, true, true, 2, 1, true, true, false]);
     expect(a.dependencies.has(b)).True();
     expect(a.dependencies.has(c)).True();

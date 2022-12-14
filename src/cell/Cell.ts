@@ -120,7 +120,7 @@ export class Cell<TValue = any>
       return true;
     }
     if (this.equals(value)) {
-      this.handleEdgeCasesOnProcessingSameValue();
+      this.handleCasesWhenProcessingSameValue();
       return false;
     }
     this.changeValue(value);
@@ -280,12 +280,19 @@ export class Cell<TValue = any>
     }
   }
 
-  private handleEdgeCasesOnProcessingSameValue(): void {
+  private handleCasesWhenProcessingSameValue(): void {
     if (this.error) { // if the new value doesn't change the value of this cell, but previous state change resulted in error
       this.clearError();
+      return;
     }
-    if (couldBeAssociatedToVariableDataCell(this))
+    if (couldBeAssociatedToVariableDataCell(this)) {
       this.isActual = true;
+      return;
+    }
+    if (!this.isActual) {
+      this.setState(this.value, null);
+      return;
+    }
   }
 
 

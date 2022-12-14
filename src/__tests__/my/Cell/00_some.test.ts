@@ -1,5 +1,5 @@
 import {delayAsync} from '@do-while-for-each/common';
-import {actualizeScheduledCells, autorun, Cell} from '../../..';
+import {actualizeScheduledCells, autorun, cell, Cell, getCachedCell, makeObservable} from '../../..';
 import {checkFields, lastValueChangeResult} from '../../util';
 
 describe('00_some', () => {
@@ -103,6 +103,47 @@ describe('00_some', () => {
     expect(runCount).eq(2);
     expect(b.value).eq(8);
     expect(a.value).eq(7); // 8 не будет никогда?
+  });
+
+  test('новое значение равно предыдущему, а isActual === false', () => {
+
+    class A {
+
+      viewRect = {
+        width: 10,
+        height: 10,
+      }
+
+      get area() {
+        const {width, height} = this.viewRect;
+        return width * height;
+      }
+
+      constructor() {
+        makeObservable(this, {
+          viewRect: cell,
+          area: cell,
+        });
+      }
+    }
+
+    const a = new A();
+    const areaCell = getCachedCell(a, 'area') as Cell;
+    checkFields(areaCell, [undefined, false, false, 0, 0, false, false, false]);
+
+    autorun(() => {
+      const area = a.area;
+    });
+
+    checkFields(areaCell, [100, true, true, 1, 1, true, true, false]);
+
+    a.viewRect = {
+      width: 10,
+      height: 10,
+    };
+    checkFields(areaCell, [100, false, true, 1, 1, true, true, false]);
+    actualizeScheduledCells();
+    checkFields(areaCell, [100, true, true, 1, 1, true, true, false]);
   });
 
 });
