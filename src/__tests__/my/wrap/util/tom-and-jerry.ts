@@ -14,7 +14,7 @@ function getObj(): ITomAndJerry {
   };
 }
 
-class TomAndJerry {
+export class TomAndJerry {
   name = 'Tom';
   kind = 'Cat';
   constructor() {

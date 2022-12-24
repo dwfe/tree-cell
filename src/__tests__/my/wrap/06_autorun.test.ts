@@ -1,7 +1,7 @@
 import {delayAsync} from '@do-while-for-each/common';
 import '@do-while-for-each/test';
+import {instanceTomAndJerry, objTomAndJerry, TomAndJerry} from './util/tom-and-jerry';
 import {actualizeScheduledCells, autorun, cell, makeObservable} from '../../..';
-import {instanceTomAndJerry, objTomAndJerry} from './util/tom-and-jerry';
 import {checkFields} from '../../util'
 
 describe('06_autorun', () => {
@@ -75,6 +75,118 @@ describe('06_autorun', () => {
     dispose();
     await delayAsync(10);
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
+  });
+
+  test('skipInitChange', () => {
+    {
+      const obj = new TomAndJerry();
+      let runCount = 0;
+      let fullName = '';
+      autorun(() => {
+        runCount++;
+        fullName = obj.fullName();
+      });
+
+      expect(runCount).eq(1);
+      expect(fullName).eq('Tom Cat');
+
+      obj.kind = 'сорокапут';
+      expect(runCount).eq(1);
+      expect(fullName).eq('Tom Cat');
+
+      actualizeScheduledCells();
+      expect(runCount).eq(2);
+      expect(fullName).eq('Tom сорокапут');
+    }
+    {
+      const obj = new TomAndJerry();
+      let runCount = 0;
+      let fullName = '';
+      autorun(() => {
+        runCount++;
+        fullName = obj.fullName();
+      }, {skipInitChange: true});
+
+      expect(runCount).eq(1);
+      expect(fullName).eq('Tom Cat');
+
+      obj.kind = 'сорокапут';
+      expect(runCount).eq(1);
+      expect(fullName).eq('Tom Cat');
+
+      actualizeScheduledCells();
+      expect(runCount).eq(2);
+      expect(fullName).eq('Tom сорокапут');
+    }
+    {
+      const obj = new TomAndJerry();
+      let runCount = 0;
+      let runChangeCount = 0;
+      let fullName = '';
+      const dispose = autorun(() => {
+        runCount++;
+        return obj.fullName();
+      }, {
+        onChange: ({value}) => {
+          runChangeCount++;
+          fullName = value;
+        }
+      });
+
+      expect(runCount).eq(1);
+      expect(runChangeCount).eq(1); // произошел вызов onChange после инициализации дерева
+      expect(fullName).eq('Tom Cat');
+
+      obj.kind = 'сорокапут';
+      expect(runCount).eq(1);
+      expect(runChangeCount).eq(1);
+      expect(fullName).eq('Tom Cat');
+
+      actualizeScheduledCells();
+      expect(runCount).eq(2);
+      expect(runChangeCount).eq(2);
+      expect(fullName).eq('Tom сорокапут');
+
+      dispose();
+      expect(runCount).eq(2);
+      expect(runChangeCount).eq(2);
+      expect(fullName).eq('Tom сорокапут');
+    }
+    {
+      const obj = new TomAndJerry();
+      let runCount = 0;
+      let runChangeCount = 0;
+      let fullName = '';
+      const dispose = autorun(() => {
+        runCount++;
+        return obj.fullName();
+      }, {
+        skipInitChange: true,
+        onChange: ({value}) => {
+          runChangeCount++;
+          fullName = value;
+        }
+      });
+
+      expect(runCount).eq(1);
+      expect(runChangeCount).eq(0); // пропущен вызов onChange после инициализации дерева
+      expect(fullName).eq('');
+
+      obj.kind = 'сорокапут';
+      expect(runCount).eq(1);
+      expect(runChangeCount).eq(0);
+      expect(fullName).eq('');
+
+      actualizeScheduledCells();
+      expect(runCount).eq(2);
+      expect(runChangeCount).eq(1);
+      expect(fullName).eq('Tom сорокапут');
+
+      dispose();
+      expect(runCount).eq(2);
+      expect(runChangeCount).eq(1);
+      expect(fullName).eq('Tom сорокапут');
+    }
   });
 
 });
