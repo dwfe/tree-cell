@@ -21,11 +21,11 @@ export interface ICell<TValue = any> {
   deleteReaction(cell: ICell): void;
   isActivated: boolean;
 
-  onChange(listener: Listener<EventChangeListenerParam<TValue>>): void;
+  onChange(listener: Listener<EventChangeListenerParam<TValue>>): () => void;
   offChange(listener: Listener<EventChangeListenerParam<TValue>>): void;
-  onValue(listener: Listener<EventChangeValueListenerParam<TValue>>): void;
+  onValue(listener: Listener<EventChangeValueListenerParam<TValue>>): () => void;
   offValue(listener: Listener<EventChangeValueListenerParam<TValue>>): void;
-  onError(listener: Listener<Error>): void;
+  onError(listener: Listener<Error>): () => void;
   offError(listener: Listener<Error>): void;
 
   equals(value: TValue): boolean;

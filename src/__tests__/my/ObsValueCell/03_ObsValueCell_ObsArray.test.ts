@@ -1,5 +1,4 @@
 import {createObsArray, ObsValueLike} from '@do-while-for-each/common';
-import {Throw} from '@do-while-for-each/test';
 import {actualizeScheduledCells, Cell, ICell, ObsValueCell} from '../../..';
 import {checkFields} from '../../util';
 
@@ -311,8 +310,6 @@ function checkValue(cell: ICell, arr: any[]) {
 export function checkSupport(obsValue: ObsValueLike, numberOfIds: number, hasListeners: boolean, numberOfListeners?: number) {
   expect(obsValue.numberOfIds).eq(numberOfIds);
   expect(obsValue.hasListeners).eq(hasListeners);
-  if (numberOfListeners === undefined)
-    Throw(() => obsValue.numberOfListeners(), `Cannot read properties of undefined (reading 'size')`);
-  else
+  if (numberOfListeners !== undefined)
     expect(obsValue.numberOfListeners()).eq(numberOfListeners);
 }

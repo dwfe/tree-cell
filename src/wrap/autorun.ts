@@ -1,9 +1,9 @@
 import {Listener, noop} from '@do-while-for-each/common';
 import {EventChangeListenerParam, ICellOpt} from '../contract';
-import {Dispose} from './contract';
+import {IAutorunDispose} from './contract';
 import {Cell} from '../cell/Cell';
 
-export function autorun(runFn: () => void, opt: IOpt = {}): Dispose {
+export function autorun(runFn: () => void, opt: IOpt = {}): IAutorunDispose {
   const onChange = opt.onChange ?? onChangeDefault;
 
   const rootCell = new Cell(runFn, opt.rootCellOpt);
@@ -15,8 +15,8 @@ export function autorun(runFn: () => void, opt: IOpt = {}): Dispose {
 
   rootCell.offChange(noop);
 
-  const dispose: Dispose = (): void => {
-    rootCell.offChange(onChange);
+  const dispose: IAutorunDispose = (): void => {
+    rootCell.dispose();
   };
   dispose.rootCell = rootCell;
   return dispose;

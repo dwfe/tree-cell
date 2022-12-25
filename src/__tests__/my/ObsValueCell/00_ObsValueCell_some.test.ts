@@ -54,7 +54,7 @@ describe('00_ObsValueCell_some', () => {
     expect(mapCellValue.numberOfListeners()).eq(1);
     checkFields(mapCell, [map, true, true, 0, 1, false, false, false]);
 
-    mapCellValue.on('change', onChangeMap);
+    mapCellValue.onChange(onChangeMap);
     expect(runMapChangeCount).eq(0);
     expect(mapCellValue.numberOfListeners()).eq(2);
     expect(mapCellValueData).eq(undefined);

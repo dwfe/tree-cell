@@ -8,7 +8,7 @@ export interface ICellInit {
   cellOpt?: any;
 }
 
-export interface Dispose {
+export interface IAutorunDispose {
   (): void;
   rootCell: Cell;
 }

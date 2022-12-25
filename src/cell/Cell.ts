@@ -240,27 +240,27 @@ export class Cell<TValue = any>
 
 //region Events wrap
 
-  onChange(listener: Listener<EventChangeListenerParam<TValue>>): void {
-    this.on('change', listener);
+  onChange(listener: Listener<EventChangeListenerParam<TValue>>) {
+    return this.on('change', listener);
   }
 
-  offChange(listener: Listener<EventChangeListenerParam<TValue>>): void {
+  offChange(listener: Listener<EventChangeListenerParam<TValue>>) {
     this.off('change', listener);
   }
 
-  onValue(listener: Listener<EventChangeValueListenerParam<TValue>>): void {
-    this.on('value', listener);
+  onValue(listener: Listener<EventChangeValueListenerParam<TValue>>) {
+    return this.on('value', listener);
   }
 
-  offValue(listener: Listener<EventChangeValueListenerParam<TValue>>): void {
+  offValue(listener: Listener<EventChangeValueListenerParam<TValue>>) {
     this.off('value', listener);
   }
 
-  onError(listener: Listener<Error>): void {
-    this.on('error', listener);
+  onError(listener: Listener<Error>) {
+    return this.on('error', listener);
   }
 
-  offError(listener: Listener<Error>): void {
+  offError(listener: Listener<Error>) {
     this.off('error', listener);
   }
 
