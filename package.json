@@ -25,11 +25,11 @@
     "README.md"
   ],
   "dependencies": {
-    "@do-while-for-each/common": "1.2.50"
+    "@do-while-for-each/common": "2.x.x"
   },
   "devDependencies": {
-    "@do-while-for-each/tsconfig": "1.0.4",
-    "@do-while-for-each/test": "1.0.6"
+    "@do-while-for-each/tsconfig": "1.x.x",
+    "@do-while-for-each/test": "1.x.x"
   },
   "scripts": {
     "clean": "dwfeFs cleanDir . --fileNames=\"dist;node_modules;package-lock.json\"",
