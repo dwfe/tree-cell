@@ -1,6 +1,6 @@
-export function createDisposeManager(): IDisposeAll {
+export function createDisposeManager(): IDisposeManager {
   const arr: any[] = [];
-  const disposeAll: IDisposeAll = () => {
+  const disposeAll: IDisposeManager = () => {
     for (let i = 0; i < arr.length; i++) {
       arr[i]();
     }
@@ -10,7 +10,7 @@ export function createDisposeManager(): IDisposeAll {
   return disposeAll;
 }
 
-interface IDisposeAll {
+export interface IDisposeManager {
   (): void;
 
   storage: Array<() => void>;
