@@ -1,7 +1,7 @@
 {
   "name": "@do-while-for-each/tree-cell",
   "description": "",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "exports": "./dist/cjs/index.js",
   "typesVersions": {
     "*": {
