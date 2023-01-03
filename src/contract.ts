@@ -34,10 +34,9 @@ export interface ICell<TValue = any> {
 
 export type Fn<TValue = any> = () => TValue;
 
-
 export type EventChangeValueListenerParam<TValue = any> = { value: TValue; oldValue: TValue };
-
 export type EventChangeListenerParam<TValue = any> = Partial<EventChangeValueListenerParam<TValue>> & { error?: Error; };
+export type EventChangeListenerParamV2<TValue = any> = EventChangeValueListenerParam<TValue> & { error?: Error; };
 
 export type IError = Error | null;
 
