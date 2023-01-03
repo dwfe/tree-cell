@@ -3,10 +3,14 @@ import {EventChangeListenerParam, ICellOpt} from '../contract';
 import {IAutorunDispose} from './contract';
 import {Cell} from '../cell/Cell';
 
-export function autorun(runFn: () => void, opt: IOpt = {}): IAutorunDispose {
+export function autorun<TValue = any>(
+  runFn: () => TValue,
+  opt: IAutorunOpt<TValue> = {}
+): IAutorunDispose {
+
   const onChange = opt.onChange ?? onChangeDefault;
 
-  const rootCell = new Cell(runFn, opt.rootCellOpt);
+  const rootCell = new Cell<TValue>(runFn, opt.rootCellOpt);
 
   if (opt.skipInitChange) {
     rootCell.onChange(noop); // initialize the cell tree inside noop
@@ -23,7 +27,7 @@ export function autorun(runFn: () => void, opt: IOpt = {}): IAutorunDispose {
 }
 
 
-interface IOpt<TValue = any> {
+export interface IAutorunOpt<TValue = any> {
   onChange?: Listener<EventChangeListenerParam<TValue>>;
   skipInitChange?: boolean;
   rootCellOpt?: ICellOpt<any>;
