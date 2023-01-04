@@ -1,5 +1,5 @@
-import {Listener, noop} from '@do-while-for-each/common';
-import {EventChangeListenerParamV2, ICellOpt} from '../contract';
+import {noop} from '@do-while-for-each/common';
+import {EventChangeListenerParam, ICellOpt} from '../contract';
 import {Cell} from '../cell/Cell';
 
 export function autorun<TValue = any>(
@@ -7,35 +7,62 @@ export function autorun<TValue = any>(
   opt: IAutorunOpt<TValue> = {}
 ): IAutorunDispose<TValue> {
 
-  const onChange = opt.onChange ?? onChangeDefault;
   const rootCell = new Cell(runFn, opt.rootCellOpt);
 
-  if (opt.skipInitChange) {
+  const onChange = opt.onChange
+    ? getChangeHandler(opt.onChange)
+    : getChangeHandlerDefault();
+
+  if (opt.skipInitResult) {
     rootCell.onChange(noop); // initialize the cell tree inside noop
   }
-  rootCell.onChange(onChange as any);
-  rootCell.offChange(noop);
+  rootCell.onChange(onChange);
 
-  const dispose: IAutorunDispose = (): void => rootCell.dispose();
+  if (opt.skipInitResult) {
+    rootCell.offChange(noop);
+  }
+
+  const dispose: IAutorunDispose = (): void => {
+    rootCell.dispose();
+  };
   dispose.rootCell = rootCell;
   return dispose;
 }
 
 
 export interface IAutorunOpt<TValue> {
-  onChange?: Listener<EventChangeListenerParamV2<TValue>>;
-  skipInitChange?: boolean;
+  onChange?: IAutorunChangeHandler<TValue>;
+  skipInitResult?: boolean;
   rootCellOpt?: ICellOpt<TValue>;
+  debugId?: string;
 }
 
+export type IAutorunChangeHandler<TValue = any> =
+  (value: TValue, oldValue: TValue, error?: Error) => void
+  ;
+
 export interface IAutorunDispose<TValue = any> {
+
   (): void;
 
   rootCell: Cell<TValue>;
+
 }
 
 
-function onChangeDefault(change: EventChangeListenerParamV2): void {
-  if (change.error)
-    console.error('AUTORUN', change.error.message);
-}
+const getChangeHandler = (onChange: IAutorunChangeHandler): any =>
+  (change: EventChangeListenerParam) => {
+    if (change.error) {
+      console.error('AUTORUN', change.error.message);
+      return;
+    }
+    onChange(change.value, change.oldValue, change.error);
+  }
+;
+
+const getChangeHandlerDefault = (): any =>
+  (change: EventChangeListenerParam) => {
+    if (change.error)
+      console.error('AUTORUN', change.error.message);
+  }
+;

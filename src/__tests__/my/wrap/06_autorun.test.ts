@@ -1,5 +1,5 @@
 import {delayAsync} from '@do-while-for-each/common';
-import '@do-while-for-each/test';
+import {Throw} from '@do-while-for-each/test';
 import {instanceTomAndJerry, objTomAndJerry, TomAndJerry} from './util/tom-and-jerry';
 import {actualizeScheduledCells, autorun, cell, makeObservable} from '../../..';
 import {checkFields} from '../../util'
@@ -25,9 +25,9 @@ describe('06_autorun', () => {
     });
     const onChange = jest.fn();
     expect(onChange).toBeCalledTimes(0);
-    autorun(() => obj.full(), {onChange});
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange.mock.lastCall[0].error.message).eq('123');
+    const {rootCell} = autorun(() => obj.full(), {onChange});
+    expect(onChange).toBeCalledTimes(0);
+    Throw(() => rootCell.get(), '123');
   });
 
   test('dispose -> #1 root cell has no dependencies', async () => {
@@ -105,7 +105,7 @@ describe('06_autorun', () => {
       autorun(() => {
         runCount++;
         fullName = obj.fullName();
-      }, {skipInitChange: true});
+      }, {skipInitResult: true});
 
       expect(runCount).eq(1);
       expect(fullName).eq('Tom Cat');
@@ -127,7 +127,7 @@ describe('06_autorun', () => {
         runCount++;
         return obj.fullName();
       }, {
-        onChange: ({value}) => {
+        onChange: value => {
           runChangeCount++;
           fullName = value;
         }
@@ -161,8 +161,8 @@ describe('06_autorun', () => {
         runCount++;
         return obj.fullName();
       }, {
-        skipInitChange: true,
-        onChange: ({value}) => {
+        skipInitResult: true,
+        onChange: value => {
           runChangeCount++;
           fullName = value;
         }
