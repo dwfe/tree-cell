@@ -1,6 +1,6 @@
 {
   "name": "@do-while-for-each/tree-cell",
-  "description": "",
+  "description": "Another implementation of pull-based reactivity",
   "version": "1.0.11",
   "exports": "./dist/cjs/index.js",
   "typesVersions": {
