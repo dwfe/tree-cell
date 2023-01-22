@@ -180,9 +180,9 @@ Accordingly, the following properties can be annotated:
 
 | annotation     | method | value | getter | accessor | setter |
 |----------------|--------|-------|--------|----------|--------|
-| `asyncCell`    | ✅     | ✅    | ❌     | ❌      | ❌     |
-| `obsValueCell` | ❌     | ✅    | ❌     | ❌      | ❌     |
-| `cell`         | ✅     | ✅    | ✅     | ❌      | ❌     |
+| `asyncCell`    | ✅      | ✅     | ❌      | ❌        | ❌      |
+| `obsValueCell` | ❌      | ✅     | ❌      | ❌        | ❌      |
+| `cell`         | ✅      | ✅     | ✅      | ❌        | ❌      |
 
 Also, for **value** properties, a change is performed:
 
@@ -345,10 +345,6 @@ b.on('change', ({value}) => {
 ## Test: `a -> b ? m : c`
 
 ![a_b-m-c](./docs/pics/test_03-a_b-m-c.png)
-
-# TODO
-
-- react cell state
 
 # Inspired by
 
