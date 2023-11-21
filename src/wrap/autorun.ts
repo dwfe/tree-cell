@@ -1,17 +1,23 @@
 import {noop} from '@do-while-for-each/common';
 import {EventChangeListenerParam, ICellOpt} from '../contract';
+import {IChangeHandler, IRunnersDispose} from './contract';
 import {Cell} from '../cell/Cell';
 
 export function autorun<TValue = any>(
   runFn: () => TValue,
   opt: IAutorunOpt<TValue> = {}
-): IAutorunDispose<TValue> {
+): IRunnersDispose<TValue> {
 
   const rootCell = new Cell(runFn, opt.rootCellOpt);
+  const dispose: IRunnersDispose = (): void => {
+    rootCell.dispose();
+  };
+  dispose.rootCell = rootCell;
 
   const onChange = opt.onChange
     ? getChangeHandler(opt.onChange)
     : getChangeHandlerDefault();
+
 
   if (opt.skipInitResult) {
     rootCell.onChange(noop); // initialize the cell tree inside noop
@@ -22,35 +28,18 @@ export function autorun<TValue = any>(
     rootCell.offChange(noop);
   }
 
-  const dispose: IAutorunDispose = (): void => {
-    rootCell.dispose();
-  };
-  dispose.rootCell = rootCell;
   return dispose;
 }
 
 
 export interface IAutorunOpt<TValue> {
-  onChange?: IAutorunChangeHandler<TValue>;
+  onChange?: IChangeHandler<TValue>;
   skipInitResult?: boolean;
   rootCellOpt?: ICellOpt<TValue>;
   debugId?: string;
 }
 
-export type IAutorunChangeHandler<TValue = any> =
-  (value: TValue, oldValue: TValue, error?: Error) => void
-  ;
-
-export interface IAutorunDispose<TValue = any> {
-
-  (): void;
-
-  rootCell: Cell<TValue>;
-
-}
-
-
-const getChangeHandler = (onChange: IAutorunChangeHandler): any =>
+const getChangeHandler = (onChange: IChangeHandler): any =>
   (change: EventChangeListenerParam) => {
     if (change.error) {
       console.error('AUTORUN', change.error.message);

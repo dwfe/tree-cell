@@ -52,7 +52,31 @@ describe('06_autorun', () => {
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
   });
 
-  test('dispose -> #2 root cell has no dependencies', async () => {
+  test('result -> #2 функция возвращает результат', async () => {
+    const obj = new A();
+    obj.isReady = true;
+    const dispose = autorun(() => obj.isReady);
+    const {rootCell} = dispose;
+    checkFields(rootCell, [true, true, true, 1, 0, true, true, false]);
+
+    dispose();
+    await delayAsync(10);
+    checkFields(rootCell, [true, false, false, 0, 0, false, false, false]);
+
+    obj.isReady = true;
+    await delayAsync(10);
+    checkFields(rootCell, [true, false, false, 0, 0, false, false, false]);
+
+    obj.isReady = false;
+    await delayAsync(10);
+    checkFields(rootCell, [true, false, false, 0, 0, false, false, false]);
+
+    obj.isReady = true;
+    await delayAsync(10);
+    checkFields(rootCell, [true, false, false, 0, 0, false, false, false]);
+  });
+
+  test('dispose -> #3 root cell has no dependencies', async () => {
     const obj = {
       name: 'Alex',
       getName() {
@@ -211,3 +235,18 @@ function checkTomAndJerry(target) {
   actualizeScheduledCells();
   expect(result).eq('Jerry Mouse');
 }
+
+
+//region Support
+
+class A {
+  isReady = false;
+
+  constructor() {
+    makeObservable(this, {
+      isReady: cell,
+    })
+  }
+}
+
+//endregion Support

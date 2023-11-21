@@ -48,8 +48,8 @@ describe('04_ObsValueCell_ObsObject', () => {
     checkFields(rootCell, [value, true, true, 1, 0, true, true, false]);
     checkFields(obsCell, [value, true, true, 0, 1, false, false, false]);
 
-    result = value.hello = 'ok';
-    expect(result).eq('ok');
+    result = value.hello = 'ok1';
+    expect(result).eq('ok1');
     actualizeScheduledCells();
     expect(rootOnChange).toBeCalledTimes(1);
     expect(callCount).eq(4);
