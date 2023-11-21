@@ -1,6 +1,6 @@
 import {noop, Throw} from '@do-while-for-each/test';
 import {actualizeScheduledCells, Cell} from '../../..';
-import {isCellScheduled} from '../../../sheduler';
+import {isCellScheduled} from '../../../scheduler';
 
 describe('07_scheduler', () => {
 

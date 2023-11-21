@@ -1,6 +1,6 @@
 import {EventEmitter, Listener} from '@do-while-for-each/common';
 import {EventChangeListenerParam, EventChangeValueListenerParam, Fn, ICell, ICellOpt, IError} from '../contract';
-import {actualizeScheduledCells, isCellScheduled, scheduleRootCellActualization} from '../sheduler';
+import {actualizeScheduledCells, isCellScheduled, scheduleRootCellActualization} from '../scheduler';
 import {couldBeAssociatedToVariableDataCell} from './var-data-cell.detectors';
 
 let nowExecCell: undefined | ICell; // the cell whose fn is currently being executed

@@ -1,4 +1,4 @@
-export {actualizeScheduledCells, CyclicActualizeOfScheduledCellsError} from './sheduler';
+export {actualizeScheduledCells, CyclicActualizeOfScheduledCellsError} from './scheduler';
 export {Cell, CyclicExecutionError, ValueAcceptanceError} from './cell/Cell';
 export {AsyncCell} from './cell/AsyncCell';
 export {ObsValueCell} from './cell/ObsValueCell';
