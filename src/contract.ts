@@ -20,6 +20,7 @@ export interface ICell<TValue = any> {
   addReaction(cell: ICell): void;
   deleteReaction(cell: ICell): void;
   isActivated: boolean;
+  deactivate(): void;
 
   onChange(listener: Listener<EventChangeListenerParam<TValue>>): () => void;
   offChange(listener: Listener<EventChangeListenerParam<TValue>>): void;

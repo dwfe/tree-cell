@@ -23,7 +23,7 @@ export class ObsValueCell<TValue extends ObsValueLike<'change', any>>
     //super.activate();  ObsValueCell cannot have dependencies, because technically ObsValueCell is just a cell with data
   }
 
-  protected deactivate() {
+  deactivate() {
     if (!this.isObserved)
       this.value.dispose();
     //super.deactivate();  ObsValueCell was not activated

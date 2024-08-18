@@ -40,7 +40,7 @@ export class AsyncCell<TValue = any> extends Cell<TValue> {
     //super.activate();  AsyncCell cannot have dependencies, because technically AsyncCell is just a cell with data
   }
 
-  protected deactivate() {
+  deactivate() {
     if (!this.isObserved)
       this.sourceCell.dispose();
     //super.deactivate();  AsyncCell was not activated

@@ -1,6 +1,6 @@
 import {EventEmitter, Listener} from '@do-while-for-each/common';
+import {actualizeScheduledCells, isActualizationProcessAlreadyScheduled, isActualizationProcessGoingOnNow, isCellScheduled, scheduleDeactivation, scheduleRootCellActualization} from '../scheduler';
 import {EventChangeListenerParam, EventChangeValueListenerParam, Fn, ICell, ICellOpt, IError} from '../contract';
-import {actualizeScheduledCells, isCellScheduled, scheduleRootCellActualization} from '../scheduler';
 import {couldBeAssociatedToVariableDataCell} from './var-data-cell.detectors';
 
 let nowExecCell: undefined | ICell; // the cell whose fn is currently being executed
@@ -211,9 +211,22 @@ export class Cell<TValue = any>
 //region Deactivate
 
   override onLastUnsubscribed(): void {
-    if (!this.isActual && isCellScheduled(this) // if it is a rootCell that is scheduled for actualization
-      && this.isActivated && !this.isObserved) {
-      actualizeScheduledCells(); // actualize before deactivation
+    if (
+      !this.isActual &&   // is dirty
+      !this.isObserved && // has no reactions and listeners
+      this.isActivated && // has deps
+      isCellScheduled(this) // if it is a rootCell that is scheduled for actualization!!!
+    ) {
+      if (
+        !isActualizationProcessGoingOnNow() &&
+        !isActualizationProcessAlreadyScheduled()
+      ) {
+        actualizeScheduledCells(); // actualize before deactivation
+        this.deactivate();
+      } else {
+        scheduleDeactivation(this);
+      }
+      return;
     }
     this.deactivate();
   }
@@ -223,7 +236,7 @@ export class Cell<TValue = any>
     this.deactivate(); // propagate the deactivation down the cell tree
   }
 
-  protected deactivate(): void {
+  deactivate(): void {
     if (!this.isActivated || this.isObserved) {
       return;
     }

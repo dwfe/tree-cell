@@ -3,6 +3,7 @@ import {ICell} from '../contract';
 
 const scheduled: Array<ICell> = []; // root cells scheduled for actualization
 let rootCellInProcess: ICell | null = null; // the root cell that is currently being actualized
+const deactivateAfterActualize: Array<ICell> = [];
 
 export function scheduleRootCellActualization(cell: ICell): void {
   cell.isActual = false;
@@ -26,7 +27,7 @@ export function scheduleRootCellActualization(cell: ICell): void {
 }
 
 export function actualizeScheduledCells(): void {
-  if (rootCellInProcess !== null) {
+  if (isActualizationProcessGoingOnNow()) {
     throw new CyclicActualizeOfScheduledCellsError();
   }
   let index = 0;
@@ -36,11 +37,28 @@ export function actualizeScheduledCells(): void {
   }
   scheduled.length = 0;
   rootCellInProcess = null;
+
+  for (const cell of deactivateAfterActualize) {
+    cell.deactivate();
+  }
+  deactivateAfterActualize.length = 0;
 }
 
+export function isActualizationProcessGoingOnNow() {
+  return rootCellInProcess !== null;
+}
+
+export function isActualizationProcessAlreadyScheduled() {
+  return scheduled.length > 0;
+}
 
 export function isCellScheduled(cell: ICell): boolean {
   return scheduled.includes(cell);
+}
+
+export function scheduleDeactivation(cell: ICell): void {
+  if (!deactivateAfterActualize.includes(cell))
+    deactivateAfterActualize.push(cell);
 }
 
 

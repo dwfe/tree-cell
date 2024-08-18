@@ -1,4 +1,4 @@
-import {delayAsync} from '@do-while-for-each/common';
+import {delayAsync, isEqual} from '@do-while-for-each/common';
 import {Throw} from '@do-while-for-each/test';
 import {instanceTomAndJerry, objTomAndJerry, TomAndJerry} from './util/tom-and-jerry';
 import {actualizeScheduledCells, autorun, cell, makeObservable} from '../../..';
@@ -210,6 +210,85 @@ describe('06_autorun', () => {
       expect(runCount).eq(2);
       expect(runChangeCount).eq(1);
       expect(fullName).eq('Tom сорокапут');
+    }
+  });
+
+  test('waitTimeForDebounceOfResultProcessing', async () => {
+    const check = async (debounceWaitTime: number | undefined, actualizeAsync?: boolean) => {
+      const actualize = async () => {
+        if (actualizeAsync)
+          return delayAsync(0); // подождать пока они ячейки сами актуализируются в микротаске
+        actualizeScheduledCells(); // либо принудительно вызвать синхронную актуализацию
+      };
+
+      const result: Array<{ name: string; countRootCellBody: number; countOnChange: number; }> = [];
+      let countRootCellBody = 0;
+      let countOnChange = 0;
+      const obj = new TomAndJerry();
+      autorun(() => {
+        countRootCellBody++;
+        return obj.name;
+      }, {
+        waitTimeForDebounceOfResultProcessing: debounceWaitTime,
+        onChange: name => {
+          countOnChange++;
+          result.push({name, countRootCellBody, countOnChange});
+        },
+      })
+
+      // после инициализации RootCell countRootCellBody=1
+      obj.name = 'Flash';
+      obj.name = 'Antman';
+      obj.name = 'Batman';
+      await actualize(); // после актуализации countRootCellBody=2
+
+      obj.name = 'Aquaman';
+      obj.name = 'Joker';
+      obj.name = 'Superman';
+      await actualize(); // после актуализации countRootCellBody=3
+
+      return result;
+    };
+
+    { // 1. Нет дебонса. Актуализация ячеек синхронно.
+      const result = await check(undefined);
+      await delayAsync(10);
+      expect(result.length).eq(3)
+      expect(isEqual(result[0], {name: 'Tom', countRootCellBody: 1, countOnChange: 1})).True();
+      expect(isEqual(result[1], {name: 'Batman', countRootCellBody: 2, countOnChange: 2})).True();
+      expect(isEqual(result[2], {name: 'Superman', countRootCellBody: 3, countOnChange: 3})).True();
+      console.log(``, result);
+    }
+    { // 2. Есть дебонс. Актуализация ячеек синхронно.
+      const result = await check(0);
+      await delayAsync(10);
+      expect(result.length).eq(1)
+      expect(isEqual(result[0], {name: 'Superman', countRootCellBody: 3, countOnChange: 1})).True();
+      console.log(``, result);
+    }
+    { // 3. Нет дебонса. Актуализация ячеек Асинхронно.
+      const result = await check(undefined, true);
+      await delayAsync(10);
+      expect(result.length).eq(3)
+      expect(isEqual(result[0], {name: 'Tom', countRootCellBody: 1, countOnChange: 1})).True();
+      expect(isEqual(result[1], {name: 'Batman', countRootCellBody: 2, countOnChange: 2})).True();
+      expect(isEqual(result[2], {name: 'Superman', countRootCellBody: 3, countOnChange: 3})).True();
+      console.log(``, result);
+    }
+    { // 4. Есть дебонс = 0 мс. Актуализация ячеек Асинхронно.
+      const result = await check(0, true);
+      await delayAsync(10);
+      expect(result.length).eq(2)
+      expect(isEqual(result[0], {name: 'Batman', countRootCellBody: 2, countOnChange: 1})).True();
+      expect(isEqual(result[1], {name: 'Superman', countRootCellBody: 3, countOnChange: 2})).True();
+      console.log(``, result);
+    }
+    { // 5. Есть дебонс = 5 мс. Актуализация ячеек Асинхронно.
+      const result = await check(5, true);
+      await delayAsync(10);
+      expect(result.length).eq(1);
+      expect(isEqual(result[0], {name: 'Superman', countRootCellBody: 3, countOnChange: 1})).True();
+      console.log(``, result);
     }
   });
 

@@ -1,3 +1,4 @@
+import {delayAsync} from '@do-while-for-each/common';
 import {noop} from '@do-while-for-each/test';
 import {actualizeScheduledCells, autorun, Cell, cell, makeObservable} from '../..';
 import {checkFields} from '../util';
@@ -40,7 +41,7 @@ describe('Doubler', () => {
     dispose();
   });
 
-  test('check', () => {
+  test('check', async () => {
     const obj = new Doubler(1);
 
     let runCount = 0;
@@ -82,6 +83,7 @@ describe('Doubler', () => {
     checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
 
     dispose();
+    await delayAsync(0);
     expect(runCount).eq(4);
     expect(runResult).eq(8);
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
@@ -158,7 +160,7 @@ describe('TomAndJerry', () => {
     dispose();
   });
 
-  test('check', () => {
+  test('check', async () => {
     const obj = new TomAndJerry();
 
     let runCount = 0;
@@ -185,6 +187,7 @@ describe('TomAndJerry', () => {
     checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
 
     dispose();
+    await delayAsync(0);
     expect(runCount).eq(2);
     expect(runResult).eq('Jerry Mouse');
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
@@ -234,7 +237,7 @@ describe('TomAndJerry, on cells', () => {
     rootCell.offChange(onChangeHandler); // dispose
   });
 
-  test('check', () => {
+  test('check', async () => {
     const obj = new TomAndJerryOnCells();
 
     let runCount = 0;
@@ -260,6 +263,7 @@ describe('TomAndJerry, on cells', () => {
     checkFields(rootCell, [undefined, false, true, 1, 0, true, true, false]);
 
     rootCell.offChange(noop); // dispose
+    await delayAsync(0);
     expect(runCount).eq(2);
     expect(runResult).eq('Jerry Mouse');
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);

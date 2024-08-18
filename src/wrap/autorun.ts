@@ -1,4 +1,4 @@
-import {noop} from '@do-while-for-each/common';
+import {debounce, noop} from '@do-while-for-each/common';
 import {EventChangeListenerParam, ICellOpt} from '../contract';
 import {IChangeHandler, IRunnersDispose} from './contract';
 import {Cell} from '../cell/Cell';
@@ -14,9 +14,21 @@ export function autorun<TValue = any>(
   };
   dispose.rootCell = rootCell;
 
+  // Помимо дебонса на микротасках, встроенного в ячейки
+  // при помощи opt.waitTimeForDebounceOfResultProcessing можно добавить еще и дебонс на макротасках.
+  // Такой дебонс способен фильтровать изменения rootCell, тем самым реже применяется измененное состояние.
+  let onChangeDebounced: IChangeHandler | null = null;
+  if (!(opt.waitTimeForDebounceOfResultProcessing == undefined)) {
+    const waitTime = opt.waitTimeForDebounceOfResultProcessing > 0 ? opt.waitTimeForDebounceOfResultProcessing : 0;
+    onChangeDebounced = debounce(
+      (value: TValue, oldValue: TValue, error?: Error) => opt.onChange!(value, oldValue, error),
+      waitTime,
+    );
+  }
+
   const onChange = opt.onChange
-    ? getChangeHandler(opt.onChange)
-    : getChangeHandlerDefault();
+    ? getChangeHandler(opt, rootCell, onChangeDebounced)
+    : getChangeHandlerDefault(rootCell);
 
 
   if (opt.skipInitResult) {
@@ -32,26 +44,38 @@ export function autorun<TValue = any>(
 }
 
 
-export interface IAutorunOpt<TValue> {
+export interface IAutorunOpt<TValue = any> {
   onChange?: IChangeHandler<TValue>;
   skipInitResult?: boolean;
+  waitTimeForDebounceOfResultProcessing?: number;
   rootCellOpt?: ICellOpt<TValue>;
   debugId?: string;
 }
 
-const getChangeHandler = (onChange: IChangeHandler): any =>
+const getChangeHandler = (opt: IAutorunOpt, rootCell: Cell, onChangeDebounced: IChangeHandler | null): any =>
   (change: EventChangeListenerParam) => {
     if (change.error) {
-      console.error('AUTORUN', change.error.message);
+      printErr(change.error.message, rootCell);
       return;
     }
-    onChange(change.value, change.oldValue, change.error);
+    if (onChangeDebounced) {
+      onChangeDebounced(change.value, change.oldValue, change.error);
+      return;
+    }
+    opt.onChange!(change.value, change.oldValue, change.error);
   }
 ;
 
-const getChangeHandlerDefault = (): any =>
+const getChangeHandlerDefault = (rootCell: Cell): any =>
   (change: EventChangeListenerParam) => {
     if (change.error)
-      console.error('AUTORUN', change.error.message);
+      printErr(change.error.message, rootCell);
   }
 ;
+
+function printErr(message: string, rootCell: Cell): void {
+  console.error('AUTORUN', message);
+  console.error('rootCell.fn');
+  console.log(rootCell.fn);
+  console.log('---------',);
+}
