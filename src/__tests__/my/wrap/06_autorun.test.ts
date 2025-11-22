@@ -213,7 +213,7 @@ describe('06_autorun', () => {
     }
   });
 
-  test('waitTimeForDebounceOfResultProcessing', async () => {
+  test('debounceTimeToProcessChanges', async () => {
     const check = async (debounceWaitTime: number | undefined, actualizeAsync?: boolean) => {
       const actualize = async () => {
         if (actualizeAsync)
@@ -229,7 +229,7 @@ describe('06_autorun', () => {
         countRootCellBody++;
         return obj.name;
       }, {
-        waitTimeForDebounceOfResultProcessing: debounceWaitTime,
+        debounceTimeToProcessChanges: debounceWaitTime,
         onChange: name => {
           countOnChange++;
           result.push({name, countRootCellBody, countOnChange});

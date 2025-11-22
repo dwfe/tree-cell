@@ -52,6 +52,8 @@ export interface ICellOpt<TValue> {
 
   filter?: (value: TValue) => boolean;
 
+  actualizeBeforeDeath?: boolean;
+
 }
 
 export type IAsyncCellOpt<TValue> = ICellOpt<TValue> & {

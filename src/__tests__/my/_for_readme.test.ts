@@ -84,8 +84,8 @@ describe('Doubler', () => {
 
     dispose();
     await delayAsync(0);
-    expect(runCount).eq(4);
-    expect(runResult).eq(8);
+    expect(runCount).eq(3);
+    expect(runResult).eq(6);
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
   });
 
@@ -188,8 +188,8 @@ describe('TomAndJerry', () => {
 
     dispose();
     await delayAsync(0);
-    expect(runCount).eq(2);
-    expect(runResult).eq('Jerry Mouse');
+    expect(runCount).eq(1);
+    expect(runResult).eq('Tom Cat');
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
   });
 
@@ -264,8 +264,8 @@ describe('TomAndJerry, on cells', () => {
 
     rootCell.offChange(noop); // dispose
     await delayAsync(0);
-    expect(runCount).eq(2);
-    expect(runResult).eq('Jerry Mouse');
+    expect(runCount).eq(1);
+    expect(runResult).eq('Tom Cat');
     checkFields(rootCell, [undefined, false, false, 0, 0, false, false, false]);
   });
 

@@ -14,12 +14,14 @@ export function autorun<TValue = any>(
   };
   dispose.rootCell = rootCell;
 
-  // Помимо дебонса на микротасках, встроенного в ячейки
-  // при помощи opt.waitTimeForDebounceOfResultProcessing можно добавить еще и дебонс на макротасках.
-  // Такой дебонс способен фильтровать изменения rootCell, тем самым реже применяется измененное состояние.
+  /**
+   * Помимо дебонса на микротасках, встроенного в ячейки
+   * при помощи opt.debounceTimeToProcessChanges можно добавить еще и дебонс на макротасках.
+   * Такой дебонс способен фильтровать изменения rootCell, тем самым реже применяется измененное состояние.
+   */
   let onChangeDebounced: IChangeHandler | null = null;
-  if (!(opt.waitTimeForDebounceOfResultProcessing == undefined)) {
-    const waitTime = opt.waitTimeForDebounceOfResultProcessing > 0 ? opt.waitTimeForDebounceOfResultProcessing : 0;
+  if (!(opt.debounceTimeToProcessChanges == undefined)) {
+    const waitTime = opt.debounceTimeToProcessChanges > 0 ? opt.debounceTimeToProcessChanges : 0;
     onChangeDebounced = debounce(
       (value: TValue, oldValue: TValue, error?: Error) => opt.onChange!(value, oldValue, error),
       waitTime,
@@ -47,7 +49,7 @@ export function autorun<TValue = any>(
 export interface IAutorunOpt<TValue = any> {
   onChange?: IChangeHandler<TValue>;
   skipInitResult?: boolean;
-  waitTimeForDebounceOfResultProcessing?: number;
+  debounceTimeToProcessChanges?: number;
   rootCellOpt?: ICellOpt<TValue>;
   debugId?: string;
 }

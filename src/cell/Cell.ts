@@ -2,6 +2,7 @@ import {EventEmitter, Listener} from '@do-while-for-each/common';
 import {actualizeScheduledCells, isActualizationProcessAlreadyScheduled, isActualizationProcessGoingOnNow, isCellScheduled, scheduleDeactivation, scheduleRootCellActualization} from '../scheduler';
 import {EventChangeListenerParam, EventChangeValueListenerParam, Fn, ICell, ICellOpt, IError} from '../contract';
 import {couldBeAssociatedToVariableDataCell} from './var-data-cell.detectors';
+import {skipWhenProcessingSchedule} from '../scheduler/riims.sheduler';
 
 let nowExecCell: undefined | ICell; // the cell whose fn is currently being executed
 
@@ -38,6 +39,7 @@ export class Cell<TValue = any>
   onChangedFromOutside: ICellOpt<TValue>['onChangedFromOutside'];
   tap: ICellOpt<TValue>['tap'];
   filter: ICellOpt<TValue>['filter'];
+  actualizeBeforeDeath = false;
 
   constructor(val: Fn<TValue> | TValue,
               opt: ICellOpt<TValue> = {}) {
@@ -103,6 +105,12 @@ export class Cell<TValue = any>
       for (const newDep of newDeps) {
         if (!prevDeps.has(newDep))
           newDep.addReaction(this);
+      }
+    } else {
+      // Здесь же надо удалить реакцию из ячеек, которые перестали быть зависимостями.
+      for (const prevDep of prevDeps) {
+        if (!newDeps.has(prevDep))
+          prevDep.deleteReaction(this);
       }
     }
     this.process(value as TValue, error);
@@ -211,24 +219,29 @@ export class Cell<TValue = any>
 //region Deactivate
 
   override onLastUnsubscribed(): void {
-    if (
-      !this.isActual &&   // is dirty
-      !this.isObserved && // has no reactions and listeners
-      this.isActivated && // has deps
-      isCellScheduled(this) // if it is a rootCell that is scheduled for actualization!!!
-    ) {
+    if (this.actualizeBeforeDeath) {
       if (
-        !isActualizationProcessGoingOnNow() &&
-        !isActualizationProcessAlreadyScheduled()
+        !this.isActual &&   // is dirty
+        !this.isObserved && // has no reactions and listeners
+        this.isActivated && // has deps
+        isCellScheduled(this) // if it is a rootCell that is scheduled for actualization!!!
       ) {
-        actualizeScheduledCells(); // actualize before deactivation
-        this.deactivate();
-      } else {
-        scheduleDeactivation(this);
+        if (
+          !isActualizationProcessGoingOnNow() &&
+          !isActualizationProcessAlreadyScheduled()
+        ) {
+          actualizeScheduledCells(); // actualize before deactivation
+          this.deactivate();
+        } else {
+          scheduleDeactivation(this);
+        }
+        return;
       }
-      return;
+      this.deactivate();
+    } else {
+      this.deactivate();
+      skipWhenProcessingSchedule(this);
     }
-    this.deactivate();
   }
 
   deleteReaction(cell: ICell): void {
@@ -315,6 +328,7 @@ export class Cell<TValue = any>
     this.onChangedFromOutside = opt.onChangedFromOutside;
     this.tap = opt.tap;
     this.filter = opt.filter;
+    this.actualizeBeforeDeath = !!opt.actualizeBeforeDeath;
   }
 
 

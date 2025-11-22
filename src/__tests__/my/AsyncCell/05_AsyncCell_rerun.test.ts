@@ -68,8 +68,8 @@ describe('05_AsyncCell_rerun', () => {
     // возобновить наблюдение за root-ячейкой
     rootCell.onChange(rootOnChange);
     await delayAsync(100); // подождать пока придет ответ от сервера -> авто-актуализация root-ячейки
-    expect(rootOnChange).toBeCalledTimes(4);
-    checkFields(rootCell, [3, true, true, 1, 0, true, true, false]);
+    expect(rootOnChange).toBeCalledTimes(3);
+    checkFields(rootCell, [2, false, true, 1, 0, true, true, false]);
     checkFields(asyncCell, [3, true, true, 0, 1, false, false, false]);
     checkFields(sourceCell, [Check.SKIP, true, true, 1, 0, true, true, false]);
     expect(sourceCell.value).not.eq(sourceValue);
@@ -79,7 +79,7 @@ describe('05_AsyncCell_rerun', () => {
     // сделать перезапрос данных с сервера
     asyncCell.rerun();
     await delayAsync(100);
-    expect(rootOnChange).toBeCalledTimes(5);
+    expect(rootOnChange).toBeCalledTimes(4);
     checkFields(rootCell, [4, true, true, 1, 0, true, true, false]);
     checkFields(asyncCell, [4, true, true, 0, 1, false, false, false]);
     checkFields(sourceCell, [Check.SKIP, true, true, 1, 0, true, true, false]);
@@ -90,7 +90,7 @@ describe('05_AsyncCell_rerun', () => {
     // сделать перезапрос данных с сервера
     asyncCell.rerun();
     await delayAsync(100);
-    expect(rootOnChange).toBeCalledTimes(6);
+    expect(rootOnChange).toBeCalledTimes(5);
     checkFields(rootCell, [5, true, true, 1, 0, true, true, false]);
     checkFields(asyncCell, [5, true, true, 0, 1, false, false, false]);
     checkFields(sourceCell, [Check.SKIP, true, true, 1, 0, true, true, false]);
@@ -100,7 +100,7 @@ describe('05_AsyncCell_rerun', () => {
 
     // останов наблюдения за root-ячейкой
     rootCell.offChange(rootOnChange);
-    expect(rootOnChange).toBeCalledTimes(6);
+    expect(rootOnChange).toBeCalledTimes(5);
     checkFields(rootCell, [5, false, false, 0, 0, false, false, false]);
     checkFields(asyncCell, [5, true, false, 0, 0, false, false, false]);
     checkFields(sourceCell, [Check.SKIP, false, false, 0, 0, false, false, false]);

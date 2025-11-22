@@ -4,6 +4,7 @@ import {ICell} from '../contract';
 const scheduled: Array<ICell> = []; // root cells scheduled for actualization
 let rootCellInProcess: ICell | null = null; // the root cell that is currently being actualized
 const deactivateAfterActualize: Array<ICell> = [];
+const skipActualization: Set<ICell> = new Set<ICell>();
 
 export function scheduleRootCellActualization(cell: ICell): void {
   cell.isActual = false;
@@ -33,10 +34,12 @@ export function actualizeScheduledCells(): void {
   let index = 0;
   while (index < scheduled.length) {
     rootCellInProcess = scheduled[index++];
+    if (skipActualization.has(rootCellInProcess)) continue;
     rootCellInProcess.actualize();
   }
   scheduled.length = 0;
   rootCellInProcess = null;
+  skipActualization.clear();
 
   for (const cell of deactivateAfterActualize) {
     cell.deactivate();
@@ -59,6 +62,10 @@ export function isCellScheduled(cell: ICell): boolean {
 export function scheduleDeactivation(cell: ICell): void {
   if (!deactivateAfterActualize.includes(cell))
     deactivateAfterActualize.push(cell);
+}
+
+export function skipWhenProcessingSchedule(cell: ICell) {
+  skipActualization.add(cell)
 }
 
 

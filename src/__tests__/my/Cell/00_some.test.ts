@@ -62,7 +62,7 @@ describe('00_some', () => {
 
     a.offChange(aOnChange);
     await delayAsync(50);
-    checkFields(a, [84, false, false, 0, 0, false, false, false]);
+    checkFields(a, [17, false, false, 0, 0, false, false, false]);
     checkFields(b, [84, true, false, 0, 0, false, false, false]);
   });
 

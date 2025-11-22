@@ -133,6 +133,7 @@ describe('01_check-fields', () => {
 
     b.set(7);
     a.onChange(noop);
+    actualizeScheduledCells();
     checkFields(a, ['hi', true, true, 2, 0, true, true, false]);
     expect(a.dependencies.has(b)).True();
     expect(a.dependencies.has(m)).True();
